@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { Phone, MessageCircle, ChevronRight, Tag } from 'lucide-react'
+import { Phone, MessageCircle, ChevronRight, Tag, FileText, Share2 } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import { getSettings } from '@/lib/settings'
@@ -61,8 +61,42 @@ export default async function ProductDetailPage({
         .slice(0, 4)
     : []
 
+  const BASE = 'https://bearing-web.vercel.app'
+  const productUrl = `${BASE}/${locale}/products/${p.id}`
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: p.name,
+    description: p.short_description || p.description || '',
+    sku: p.ma_vong_bi || p.ma_san_pham || p.id,
+    image: p.images?.length ? p.images : p.image_url ? [p.image_url] : [],
+    url: productUrl,
+    brand: { '@type': 'Brand', name: 'D&X Bearings' },
+    category: p.category?.name ?? '',
+    offers: p.variants?.length
+      ? p.variants.map(v => ({
+          '@type': 'Offer',
+          priceCurrency: 'VND',
+          price: v.gia > 0 ? v.gia : undefined,
+          availability: 'https://schema.org/InStock',
+          seller: { '@type': 'Organization', name: v.thuong_hieu },
+        }))
+      : [{
+          '@type': 'Offer',
+          priceCurrency: 'VND',
+          price: p.price > 0 ? p.price : undefined,
+          availability: 'https://schema.org/InStock',
+          url: productUrl,
+        }],
+  }
+
   return (
     <div className="public-page-bg min-h-screen">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Breadcrumb */}
       <div className="bg-white/85 border-b border-sky-100 backdrop-blur">
         <div className="max-w-6xl mx-auto px-4 py-3">
@@ -169,21 +203,38 @@ export default async function ProductDetailPage({
             )}
 
             {/* Nút liên hệ — ẩn trên mobile, dùng sticky CTA thay */}
-            <div className="hidden md:flex flex-col sm:flex-row gap-3">
-              {settings.phone && (
-                <a href={`tel:${settings.phone.replace(/\s/g,'')}`}
-                  className="focus-ring interactive-lift flex-1 flex items-center justify-center gap-2 text-white font-bold py-3.5 rounded-lg transition text-sm shadow"
-                  style={{ background: 'linear-gradient(135deg,#0A2340 0%,#123b66 100%)' }}>
-                  <Phone size={16}/> {t('callBtn', { phone: settings.phone })}
+            <div className="hidden md:flex flex-col gap-2.5">
+              <div className="flex gap-2.5">
+                {settings.phone && (
+                  <a href={`tel:${settings.phone.replace(/\s/g,'')}`}
+                    className="focus-ring interactive-lift flex-1 flex items-center justify-center gap-2 text-white font-bold py-3 rounded-lg transition text-sm shadow"
+                    style={{ background: 'linear-gradient(135deg,#0A2340 0%,#123b66 100%)' }}>
+                    <Phone size={15}/> {t('callBtn', { phone: settings.phone })}
+                  </a>
+                )}
+                {settings.zalo && (
+                  <a href={`https://zalo.me/${settings.zalo}`} target="_blank" rel="noopener noreferrer"
+                    className="focus-ring interactive-lift flex-1 flex items-center justify-center gap-2 text-white font-bold py-3 rounded-lg transition text-sm shadow"
+                    style={{ background: 'linear-gradient(135deg,#E5197E 0%,#b90f63 100%)' }}>
+                    <MessageCircle size={15}/> {t('zaloBtn')}
+                  </a>
+                )}
+              </div>
+              <div className="flex gap-2.5">
+                <Link
+                  href={`/contact?product=${p.id}&name=${encodeURIComponent(p.name)}`}
+                  className="focus-ring interactive-lift flex-1 flex items-center justify-center gap-2 font-bold py-3 rounded-lg transition text-sm border"
+                  style={{ borderColor: '#0BADE8', color: '#0BADE8', background: '#EBF8FE' }}>
+                  <FileText size={15}/> Yêu cầu báo giá
+                </Link>
+                <a
+                  href={`https://zalo.me/share?url=${encodeURIComponent(productUrl)}`}
+                  target="_blank" rel="noopener noreferrer"
+                  className="focus-ring interactive-lift flex items-center justify-center gap-2 font-bold px-4 py-3 rounded-lg transition text-sm border"
+                  style={{ borderColor: '#cfe7f1', color: '#5a8fa8', background: 'white' }}>
+                  <Share2 size={15}/> Chia sẻ
                 </a>
-              )}
-              {settings.zalo && (
-                <a href={`https://zalo.me/${settings.zalo}`} target="_blank" rel="noopener noreferrer"
-                  className="focus-ring interactive-lift flex-1 flex items-center justify-center gap-2 text-white font-bold py-3.5 rounded-lg transition text-sm shadow"
-                  style={{ background: 'linear-gradient(135deg,#E5197E 0%,#b90f63 100%)' }}>
-                  <MessageCircle size={16}/> {t('zaloBtn')}
-                </a>
-              )}
+              </div>
             </div>
 
             {/* Trust badges */}

@@ -18,7 +18,8 @@ export default function Header({ shopName, phone }: Props) {
   const links = [
     { href: '/' as const,         label: t('home') },
     { href: '/products' as const, label: t('products') },
-    { href: '/#contact' as const, label: t('contact') },
+    { href: '/about' as const,    label: t('about') },
+    { href: '/contact' as const,  label: t('contact') },
   ]
 
   return (

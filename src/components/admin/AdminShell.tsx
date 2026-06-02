@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { LayoutDashboard, Package, Settings, LogOut, Menu, X, ExternalLink, FileUp, Layers } from 'lucide-react'
+import { LayoutDashboard, Package, Settings, LogOut, Menu, X, ExternalLink, FileUp, Layers, MessageSquare } from 'lucide-react'
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import BrandLogo from '@/components/BrandLogo'
@@ -10,6 +10,7 @@ const nav = [
   { href: '/admin',             label: 'Dashboard',    icon: LayoutDashboard },
   { href: '/admin/products',    label: 'Sản phẩm',     icon: Package },
   { href: '/admin/categories',  label: 'Danh mục',     icon: Layers },
+  { href: '/admin/quotes',      label: 'Báo giá',      icon: MessageSquare },
   { href: '/admin/import',      label: 'Import Excel',  icon: FileUp },
   { href: '/admin/settings',    label: 'Cài đặt shop', icon: Settings },
 ]
