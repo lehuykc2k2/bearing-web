@@ -1,0 +1,75 @@
+{
+  "nav": {
+    "home": "Trang chủ",
+    "products": "Sản phẩm",
+    "contact": "Liên hệ"
+  },
+  "header": {
+    "hotline": "Hotline tư vấn miễn phí"
+  },
+  "home": {
+    "badge": "Chuyên cung cấp vòng bi công nghiệp",
+    "tagline": "MORE STABLE · MORE EFFICIENT · MORE AT EASE",
+    "viewProducts": "Xem sản phẩm",
+    "featuredLabel": "Sản phẩm",
+    "featuredTitle": "Nổi bật",
+    "viewAll": "Xem tất cả",
+    "whyLabel": "Tại sao chọn chúng tôi",
+    "whyTitle": "Cam kết chất lượng",
+    "f1Title": "Hàng chính hãng",
+    "f1Sub": "100% có nguồn gốc rõ ràng",
+    "f2Title": "Giao toàn quốc",
+    "f2Sub": "Nhanh chóng, đóng gói cẩn thận",
+    "f3Title": "Giá cạnh tranh",
+    "f3Sub": "Chiết khấu tốt cho đại lý",
+    "f4Title": "Tư vấn kỹ thuật",
+    "f4Sub": "Hỗ trợ chọn đúng loại vòng bi",
+    "stat1Num": "10+",
+    "stat1Label": "Năm kinh nghiệm",
+    "stat1Sub": "Trong lĩnh vực cung cấp vòng bi công nghiệp",
+    "stat2Num": "500+",
+    "stat2Label": "Loại vòng bi",
+    "stat2Sub": "Đa dạng từ các thương hiệu hàng đầu thế giới",
+    "stat3Num": "1000+",
+    "stat3Label": "Khách hàng tin dùng",
+    "stat3Sub": "Doanh nghiệp và cá nhân trên toàn quốc"
+  },
+  "products": {
+    "bannerLabel": "Vòng bi chính hãng",
+    "pageTitle": "Danh sách sản phẩm",
+    "searchResultFor": "Kết quả tìm kiếm",
+    "searchPlaceholder": "Tìm theo tên, mã vòng bi...",
+    "searchBtn": "Tìm",
+    "all": "Tất cả",
+    "count": "{count} sản phẩm",
+    "notFound": "Không tìm thấy sản phẩm",
+    "notFoundSub": "Thử từ khóa khác hoặc xem tất cả sản phẩm",
+    "backToAll": "Xem tất cả →"
+  },
+  "product": {
+    "priceLabel": "Giá bán",
+    "priceNote": "Chưa VAT. Liên hệ để được giá tốt hơn khi mua số lượng.",
+    "contactPrice": "Liên hệ để báo giá",
+    "callBtn": "Gọi: {phone}",
+    "zaloBtn": "Zalo tư vấn",
+    "badge1": "Hàng chính hãng",
+    "badge2": "Giao toàn quốc",
+    "badge3": "ISO 9001",
+    "descTitle": "Mô tả sản phẩm",
+    "back": "← Quay lại danh sách",
+    "contactPhone": "Liên hệ"
+  },
+  "footer": {
+    "ctaTitle": "Cần tư vấn chọn vòng bi phù hợp?",
+    "ctaSub": "Chuyên gia hỗ trợ miễn phí – phản hồi nhanh trong 5 phút",
+    "zaloNow": "Zalo ngay",
+    "linksTitle": "Liên kết",
+    "contactTitle": "Liên hệ",
+    "hoursTitle": "Giờ làm việc",
+    "weekdays": "Thứ 2 – Thứ 7",
+    "weekdaysHours": "07:30 – 17:30",
+    "sunday": "Chủ nhật",
+    "sundayHours": "08:00 – 12:00",
+    "rights": "All rights reserved."
+  }
+}

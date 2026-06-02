@@ -1,0 +1,75 @@
+{
+  "nav": {
+    "home": "Home",
+    "products": "Products",
+    "contact": "Contact"
+  },
+  "header": {
+    "hotline": "Free consultation hotline"
+  },
+  "home": {
+    "badge": "Industrial bearing supplier",
+    "tagline": "MORE STABLE · MORE EFFICIENT · MORE AT EASE",
+    "viewProducts": "View Products",
+    "featuredLabel": "Products",
+    "featuredTitle": "Featured",
+    "viewAll": "View all",
+    "whyLabel": "Why choose us",
+    "whyTitle": "Quality Commitment",
+    "f1Title": "Genuine Products",
+    "f1Sub": "100% traceable origin",
+    "f2Title": "Nationwide Delivery",
+    "f2Sub": "Fast, carefully packaged",
+    "f3Title": "Competitive Pricing",
+    "f3Sub": "Great discounts for dealers",
+    "f4Title": "Technical Support",
+    "f4Sub": "Help you choose the right bearing",
+    "stat1Num": "10+",
+    "stat1Label": "Years of Experience",
+    "stat1Sub": "In industrial bearing supply",
+    "stat2Num": "500+",
+    "stat2Label": "Bearing Types",
+    "stat2Sub": "From world-leading brands",
+    "stat3Num": "1000+",
+    "stat3Label": "Satisfied Customers",
+    "stat3Sub": "Businesses and individuals nationwide"
+  },
+  "products": {
+    "bannerLabel": "Genuine Industrial Bearings",
+    "pageTitle": "All Products",
+    "searchResultFor": "Search results for",
+    "searchPlaceholder": "Search by name or bearing code...",
+    "searchBtn": "Search",
+    "all": "All",
+    "count": "{count} products",
+    "notFound": "No products found",
+    "notFoundSub": "Try a different keyword or browse all products",
+    "backToAll": "View all →"
+  },
+  "product": {
+    "priceLabel": "Price",
+    "priceNote": "Excl. VAT. Contact us for bulk pricing.",
+    "contactPrice": "Contact for pricing",
+    "callBtn": "Call: {phone}",
+    "zaloBtn": "Zalo Chat",
+    "badge1": "Genuine product",
+    "badge2": "Nationwide delivery",
+    "badge3": "ISO 9001",
+    "descTitle": "Product Description",
+    "back": "← Back to products",
+    "contactPhone": "Contact"
+  },
+  "footer": {
+    "ctaTitle": "Need help choosing the right bearing?",
+    "ctaSub": "Free expert support – response within 5 minutes",
+    "zaloNow": "Zalo now",
+    "linksTitle": "Links",
+    "contactTitle": "Contact",
+    "hoursTitle": "Business Hours",
+    "weekdays": "Mon – Sat",
+    "weekdaysHours": "07:30 – 17:30",
+    "sunday": "Sunday",
+    "sundayHours": "08:00 – 12:00",
+    "rights": "All rights reserved."
+  }
+}
