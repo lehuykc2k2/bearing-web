@@ -43,10 +43,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }))
   )
 
+  const safeDate = (val?: string | null): Date => {
+    if (!val) return new Date()
+    const d = new Date(val)
+    return isNaN(d.getTime()) ? new Date() : d
+  }
+
   const productRoutes: MetadataRoute.Sitemap = LOCALES.flatMap(locale =>
     products.map(p => ({
       url: `${BASE}/${locale}/products/${p.id}`,
-      lastModified: new Date(p.updated_at ?? p.created_at ?? new Date()),
+      lastModified: safeDate(p.updated_at ?? p.created_at),
       changeFrequency: 'weekly' as const,
       priority: 0.85,
     }))
