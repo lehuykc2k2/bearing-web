@@ -36,7 +36,7 @@ export default function LanguageSwitcher() {
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className="focus-ring flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition hover:bg-white/10 text-sky-200 hover:text-white"
+        className="focus-ring flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition hover:bg-[#f7fafc] text-[#303030] hover:text-[#2c2a7c]"
       >
         <span className="text-base leading-none">{current.flag}</span>
         <span className="hidden sm:inline">{current.label}</span>
@@ -45,7 +45,7 @@ export default function LanguageSwitcher() {
 
       {open && (
         <div className="absolute right-0 mt-1 w-40 rounded-lg overflow-hidden shadow-2xl border z-50"
-          style={{ background: '#0d2d4e', borderColor: 'rgba(11,173,232,0.2)' }}>
+          style={{ background: '#ffffff', borderColor: '#e5e8ea' }}>
           {LOCALES.map(loc => (
             <button
               key={loc.code}
@@ -53,10 +53,10 @@ export default function LanguageSwitcher() {
               className="focus-ring w-full flex items-center gap-2.5 px-4 py-2.5 text-sm transition text-left"
               style={
                 loc.code === locale
-                  ? { background: '#0BADE8', color: 'white' }
-                  : { color: '#a8cfe0' }
+                  ? { background: '#2c2a7c', color: 'white' }
+                  : { color: '#303030' }
               }
-              onMouseEnter={e => { if (loc.code !== locale) (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.05)' }}
+              onMouseEnter={e => { if (loc.code !== locale) (e.currentTarget as HTMLElement).style.background = '#f7fafc' }}
               onMouseLeave={e => { if (loc.code !== locale) (e.currentTarget as HTMLElement).style.background = 'transparent' }}
             >
               <span className="text-base leading-none">{loc.flag}</span>

@@ -29,7 +29,7 @@ export default async function ContactPage({
       label: 'Hotline',
       value: settings.phone,
       href: `tel:${settings.phone.replace(/\s/g, '')}`,
-      color: '#0BADE8',
+      color: '#2c2a7c',
     },
     settings.zalo && {
       icon: MessageCircle,
@@ -43,7 +43,7 @@ export default async function ContactPage({
       label: 'Địa chỉ',
       value: settings.address,
       href: `https://maps.google.com/?q=${encodeURIComponent(settings.address)}`,
-      color: '#E5197E',
+      color: '#c51c23',
     },
     settings.facebook && {
       icon: ExternalLink,
@@ -57,7 +57,7 @@ export default async function ContactPage({
   return (
     <div className="public-page-bg min-h-screen">
       {/* Banner */}
-      <div className="hero-shell relative overflow-hidden text-white">
+      <div className="hero-shell relative overflow-hidden">
         <Image
           src="/hero-bearings-showroom.png"
           alt="Liên hệ D&X Bearings"
@@ -66,13 +66,13 @@ export default async function ContactPage({
         />
         <div className="hero-vignette absolute inset-0" />
         <div className="hero-mesh absolute inset-0" />
-        <div className="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-[#fbfdfe] to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-[#f7fafc] to-transparent" />
         <div className="soft-enter relative max-w-5xl mx-auto px-5 py-9 md:py-12 text-center">
-          <p className="text-[10px] font-bold uppercase tracking-[0.22em] mb-2" style={{ color: '#8de4ff' }}>
+          <p className="text-[10px] font-bold uppercase tracking-[0.22em] mb-2" style={{ color: '#2c2a7c' }}>
             Hỗ trợ miễn phí
           </p>
           <h1 className="text-2xl md:text-3xl font-extrabold mb-1 drop-shadow">Liên hệ & Báo giá</h1>
-          <p className="text-sm" style={{ color: '#b7d7e5' }}>Phản hồi trong 5 phút trong giờ làm việc</p>
+          <p className="text-sm" style={{ color: '#565b61' }}>Phản hồi trong 5 phút trong giờ làm việc</p>
         </div>
       </div>
 
@@ -82,7 +82,7 @@ export default async function ContactPage({
           {/* Cột trái — Thông tin liên hệ */}
           <div className="flex flex-col gap-5">
             <div>
-              <h2 className="text-xl font-extrabold mb-1" style={{ color: '#0A2340' }}>Thông tin liên hệ</h2>
+              <h2 className="text-xl font-extrabold mb-1" style={{ color: '#303030' }}>Thông tin liên hệ</h2>
               <p className="text-sm text-slate-500">Liên hệ trực tiếp qua các kênh bên dưới hoặc gửi form để chúng tôi chủ động liên hệ lại.</p>
             </div>
 
@@ -96,8 +96,8 @@ export default async function ContactPage({
                     <Icon size={18} />
                   </div>
                   <div className="min-w-0">
-                    <p className="text-xs font-bold uppercase tracking-wide mb-0.5" style={{ color: '#5a8fa8' }}>{label}</p>
-                    <p className="text-sm font-semibold truncate group-hover:underline" style={{ color: '#0A2340' }}>{value}</p>
+                    <p className="text-xs font-bold uppercase tracking-wide mb-0.5" style={{ color: '#767778' }}>{label}</p>
+                    <p className="text-sm font-semibold truncate group-hover:underline" style={{ color: '#303030' }}>{value}</p>
                   </div>
                 </a>
               ))}
@@ -106,17 +106,17 @@ export default async function ContactPage({
             {/* Giờ làm việc */}
             <div className="filter-panel rounded-lg p-4">
               <div className="flex items-center gap-2 mb-3">
-                <Clock size={16} style={{ color: '#0BADE8' }} />
-                <p className="text-sm font-bold" style={{ color: '#0A2340' }}>Giờ làm việc</p>
+                <Clock size={16} style={{ color: '#2c2a7c' }} />
+                <p className="text-sm font-bold" style={{ color: '#303030' }}>Giờ làm việc</p>
               </div>
               <div className="flex flex-col gap-1.5 text-sm">
                 <div className="flex justify-between">
                   <span className="text-slate-500">Thứ 2 – Thứ 7</span>
-                  <span className="font-semibold" style={{ color: '#0A2340' }}>07:30 – 17:30</span>
+                  <span className="font-semibold" style={{ color: '#303030' }}>07:30 – 17:30</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-500">Chủ nhật</span>
-                  <span className="font-semibold" style={{ color: '#0A2340' }}>08:00 – 12:00</span>
+                  <span className="font-semibold" style={{ color: '#303030' }}>08:00 – 12:00</span>
                 </div>
               </div>
             </div>
@@ -124,7 +124,7 @@ export default async function ContactPage({
 
           {/* Cột phải — Form */}
           <div className="filter-panel rounded-xl p-6 md:p-7">
-            <h2 className="text-lg font-extrabold mb-1" style={{ color: '#0A2340' }}>
+            <h2 className="text-lg font-extrabold mb-1" style={{ color: '#303030' }}>
               {productName ? `Báo giá: ${productName}` : 'Gửi yêu cầu báo giá'}
             </h2>
             <p className="text-xs text-slate-400 mb-5">Điền thông tin, chúng tôi sẽ gọi lại trong 5 phút.</p>

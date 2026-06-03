@@ -18,19 +18,19 @@ export default function BearingPlaceholder({ size = 160 }: { size?: number }) {
       <defs>
         {/* Outer ring gradient */}
         <radialGradient id="outerGrad" cx="35%" cy="35%" r="65%">
-          <stop offset="0%"   stopColor="#5cc8f5"/>
-          <stop offset="100%" stopColor="#0A2340"/>
+          <stop offset="0%"   stopColor="#8d8ad6"/>
+          <stop offset="100%" stopColor="#303030"/>
         </radialGradient>
         {/* Inner ring gradient */}
         <radialGradient id="innerGrad" cx="35%" cy="35%" r="65%">
-          <stop offset="0%"   stopColor="#4ab8e8"/>
-          <stop offset="100%" stopColor="#083060"/>
+          <stop offset="0%"   stopColor="#6d69bc"/>
+          <stop offset="100%" stopColor="#0c3263"/>
         </radialGradient>
         {/* Ball gradient */}
         <radialGradient id="ballGrad" cx="30%" cy="30%" r="70%">
-          <stop offset="0%"   stopColor="#e0f5ff"/>
-          <stop offset="40%"  stopColor="#0BADE8"/>
-          <stop offset="100%" stopColor="#05527a"/>
+          <stop offset="0%"   stopColor="#f7fafc"/>
+          <stop offset="40%"  stopColor="#2c2a7c"/>
+          <stop offset="100%" stopColor="#0c3263"/>
         </radialGradient>
         {/* Cage gradient */}
         <linearGradient id="cageGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -43,7 +43,7 @@ export default function BearingPlaceholder({ size = 160 }: { size?: number }) {
           <stop offset="100%" stopColor="white" stopOpacity="0"/>
         </radialGradient>
         <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-          <feDropShadow dx="0" dy="1" stdDeviation="1.5" floodColor="#0A2340" floodOpacity="0.4"/>
+          <feDropShadow dx="0" dy="1" stdDeviation="1.5" floodColor="#303030" floodOpacity="0.4"/>
         </filter>
       </defs>
 
@@ -86,7 +86,7 @@ export default function BearingPlaceholder({ size = 160 }: { size?: number }) {
       <circle cx={cx - R4*0.25} cy={cy - R4*0.3} r={R4 * 0.3}
         fill="white" opacity="0.06"/>
       {/* Center dot */}
-      <circle cx={cx} cy={cy} r="1.2" fill="rgba(11,173,232,0.5)"/>
+      <circle cx={cx} cy={cy} r="1.2" fill="rgba(44,42,124,0.42)"/>
     </svg>
   )
 }

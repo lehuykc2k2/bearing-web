@@ -8,6 +8,8 @@ import { getProductById, getProducts, getCategories } from '@/lib/data'
 import ProductCard from '@/components/public/ProductCard'
 import StickyCTA from '@/components/public/StickyCTA'
 import ProductImageGallery from '@/components/public/ProductImageGallery'
+import ProductSpecSheet from '@/components/public/ProductSpecSheet'
+import RichContentViewer from '@/components/public/RichContentViewer'
 import type { Product } from '@/types'
 
 export async function generateMetadata({
@@ -98,22 +100,22 @@ export default async function ProductDetailPage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       {/* Breadcrumb */}
-      <div className="bg-white/85 border-b border-sky-100 backdrop-blur">
+      <div className="bg-white/85 border-b backdrop-blur" style={{ borderColor: '#e5e8ea' }}>
         <div className="max-w-6xl mx-auto px-4 py-3">
           <nav className="flex items-center gap-1.5 text-xs text-slate-400 flex-wrap">
-            <Link href="/" className="focus-ring rounded hover:text-[#0BADE8] transition">Trang chủ</Link>
+            <Link href="/" className="focus-ring rounded hover:text-[#2c2a7c] transition">Trang chủ</Link>
             <ChevronRight size={12}/>
-            <Link href="/products" className="focus-ring rounded hover:text-[#0BADE8] transition">Sản phẩm</Link>
+            <Link href="/products" className="focus-ring rounded hover:text-[#2c2a7c] transition">Sản phẩm</Link>
             {p.category && (
               <>
                 <ChevronRight size={12}/>
-                <Link href={`/products?category=${p.category.slug}`} className="focus-ring rounded hover:text-[#0BADE8] transition">
+                <Link href={`/products?category=${p.category.slug}`} className="focus-ring rounded hover:text-[#2c2a7c] transition">
                   {p.category.name}
                 </Link>
               </>
             )}
             <ChevronRight size={12}/>
-            <span className="font-medium line-clamp-1" style={{ color: '#0A2340' }}>{p.name}</span>
+            <span className="font-medium line-clamp-1" style={{ color: '#303030' }}>{p.name}</span>
           </nav>
         </div>
       </div>
@@ -133,13 +135,13 @@ export default async function ProductDetailPage({
             {p.category && (
               <Link href={`/products?category=${p.category.slug}`}
                 className="focus-ring inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full hover:opacity-80 transition w-fit"
-                style={{ background: '#EBF8FE', color: '#0BADE8' }}>
+                style={{ background: '#f7fafc', color: '#2c2a7c' }}>
                 <Tag size={11}/> {p.category.name}
               </Link>
             )}
 
             <div>
-              <h1 className="text-2xl md:text-3xl font-extrabold leading-tight" style={{ color: '#0A2340' }}>
+              <h1 className="text-2xl md:text-3xl font-extrabold leading-tight" style={{ color: '#303030' }}>
                 {p.name}
               </h1>
               {p.short_description && (
@@ -150,22 +152,22 @@ export default async function ProductDetailPage({
             {/* Thông số kỹ thuật nhanh */}
             {(p.ma_vong_bi || p.duong_kinh_trong || p.duong_kinh_ngoai || p.chieu_day) && (
               <div className="flex flex-wrap gap-2">
-                {p.ma_vong_bi      && <span className="text-xs font-bold px-2.5 py-1 rounded-md" style={{ background: '#0A2340', color: 'white' }}>#{p.ma_vong_bi}</span>}
-                {p.duong_kinh_trong && <span className="text-xs px-2.5 py-1 rounded-md border bg-white" style={{ borderColor: '#b8d9ee', color: '#0A2340' }}>ID: {p.duong_kinh_trong}mm</span>}
-                {p.duong_kinh_ngoai && <span className="text-xs px-2.5 py-1 rounded-md border bg-white" style={{ borderColor: '#b8d9ee', color: '#0A2340' }}>OD: {p.duong_kinh_ngoai}mm</span>}
-                {p.chieu_day        && <span className="text-xs px-2.5 py-1 rounded-md border bg-white" style={{ borderColor: '#b8d9ee', color: '#0A2340' }}>W: {p.chieu_day}mm</span>}
+                {p.ma_vong_bi      && <span className="text-xs font-bold px-2.5 py-1 rounded-md" style={{ background: '#2c2a7c', color: 'white' }}>#{p.ma_vong_bi}</span>}
+                {p.duong_kinh_trong && <span className="text-xs px-2.5 py-1 rounded-md border bg-white" style={{ borderColor: '#dcdee0', color: '#303030' }}>ID: {p.duong_kinh_trong}mm</span>}
+                {p.duong_kinh_ngoai && <span className="text-xs px-2.5 py-1 rounded-md border bg-white" style={{ borderColor: '#dcdee0', color: '#303030' }}>OD: {p.duong_kinh_ngoai}mm</span>}
+                {p.chieu_day        && <span className="text-xs px-2.5 py-1 rounded-md border bg-white" style={{ borderColor: '#dcdee0', color: '#303030' }}>W: {p.chieu_day}mm</span>}
               </div>
             )}
 
             {/* Variants (nhiều thương hiệu) */}
             {p.variants?.length > 0 ? (
               <div className="detail-panel rounded-lg overflow-hidden">
-                <div className="px-4 py-2.5 text-xs font-bold uppercase tracking-wider" style={{ background: 'linear-gradient(90deg,#EBF8FE 0%,#FFF7E8 100%)', color: '#5a8fa8' }}>
+                <div className="px-4 py-2.5 text-xs font-bold uppercase tracking-wider" style={{ background: 'linear-gradient(90deg,#f7fafc 0%,#fff5f5 100%)', color: '#767778' }}>
                   Bảng giá theo thương hiệu
                 </div>
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b" style={{ borderColor: '#e0f2fe' }}>
+                    <tr className="border-b" style={{ borderColor: '#e5e8ea' }}>
                       <th className="text-left px-4 py-2 text-xs font-semibold text-slate-500">Thương hiệu</th>
                       <th className="text-left px-4 py-2 text-xs font-semibold text-slate-500">Giá</th>
                       <th className="text-left px-4 py-2 text-xs font-semibold text-slate-500">Tồn kho</th>
@@ -173,10 +175,10 @@ export default async function ProductDetailPage({
                   </thead>
                   <tbody>
                     {p.variants.map((v, i) => (
-                      <tr key={i} className="border-b last:border-0" style={{ borderColor: '#e0f2fe' }}>
-                        <td className="px-4 py-2.5 font-bold" style={{ color: '#0A2340' }}>{v.thuong_hieu}</td>
-                        <td className="px-4 py-2.5 font-extrabold" style={{ color: '#0BADE8' }}>
-                          {v.gia > 0 ? formatPrice(v.gia, locale) : <span className="text-sm font-semibold italic" style={{ color: '#E5197E' }}>Liên hệ</span>}
+                      <tr key={i} className="border-b last:border-0" style={{ borderColor: '#e5e8ea' }}>
+                        <td className="px-4 py-2.5 font-bold" style={{ color: '#303030' }}>{v.thuong_hieu}</td>
+                        <td className="px-4 py-2.5 font-extrabold" style={{ color: '#2c2a7c' }}>
+                          {v.gia > 0 ? formatPrice(v.gia, locale) : <span className="text-sm font-semibold italic" style={{ color: '#c51c23' }}>Liên hệ</span>}
                         </td>
                         <td className="px-4 py-2.5 text-slate-500 text-xs">{v.ton_kho || '—'}</td>
                       </tr>
@@ -186,17 +188,17 @@ export default async function ProductDetailPage({
               </div>
             ) : (
               /* Giá đơn */
-              <div className="detail-panel rounded-lg p-5" style={{ background: 'linear-gradient(135deg,#EBF8FE 0%,#ffffff 62%,#FFF7E8 100%)' }}>
+              <div className="detail-panel rounded-lg p-5" style={{ background: 'linear-gradient(135deg,#f7fafc 0%,#ffffff 62%,#fff5f5 100%)' }}>
                 {p.price > 0 ? (
                   <>
-                    <p className="text-xs font-semibold uppercase tracking-wide mb-1" style={{ color: '#5a8fa8' }}>{t('priceLabel')}</p>
-                    <p className="text-4xl font-black" style={{ color: '#0BADE8' }}>{formatPrice(p.price, locale)}</p>
-                    <p className="text-xs mt-2" style={{ color: '#5a8fa8' }}>{t('priceNote')}</p>
+                    <p className="text-xs font-semibold uppercase tracking-wide mb-1" style={{ color: '#767778' }}>{t('priceLabel')}</p>
+                    <p className="text-4xl font-black" style={{ color: '#2c2a7c' }}>{formatPrice(p.price, locale)}</p>
+                    <p className="text-xs mt-2" style={{ color: '#767778' }}>{t('priceNote')}</p>
                   </>
                 ) : (
                   <>
-                    <p className="text-xs font-semibold uppercase tracking-wide mb-1" style={{ color: '#5a8fa8' }}>{t('priceLabel')}</p>
-                    <p className="text-xl font-bold" style={{ color: '#E5197E' }}>{t('contactPrice')}</p>
+                    <p className="text-xs font-semibold uppercase tracking-wide mb-1" style={{ color: '#767778' }}>{t('priceLabel')}</p>
+                    <p className="text-xl font-bold" style={{ color: '#c51c23' }}>{t('contactPrice')}</p>
                   </>
                 )}
               </div>
@@ -208,14 +210,14 @@ export default async function ProductDetailPage({
                 {settings.phone && (
                   <a href={`tel:${settings.phone.replace(/\s/g,'')}`}
                     className="focus-ring interactive-lift flex-1 flex items-center justify-center gap-2 text-white font-bold py-3 rounded-lg transition text-sm shadow"
-                    style={{ background: 'linear-gradient(135deg,#0A2340 0%,#123b66 100%)' }}>
+                    style={{ background: 'linear-gradient(135deg,#2c2a7c 0%,#0c3263 100%)' }}>
                     <Phone size={15}/> {t('callBtn', { phone: settings.phone })}
                   </a>
                 )}
                 {settings.zalo && (
                   <a href={`https://zalo.me/${settings.zalo}`} target="_blank" rel="noopener noreferrer"
                     className="focus-ring interactive-lift flex-1 flex items-center justify-center gap-2 text-white font-bold py-3 rounded-lg transition text-sm shadow"
-                    style={{ background: 'linear-gradient(135deg,#E5197E 0%,#b90f63 100%)' }}>
+                    style={{ background: 'linear-gradient(135deg,#c51c23 0%,#94151a 100%)' }}>
                     <MessageCircle size={15}/> {t('zaloBtn')}
                   </a>
                 )}
@@ -224,14 +226,14 @@ export default async function ProductDetailPage({
                 <Link
                   href={`/contact?product=${p.id}&name=${encodeURIComponent(p.name)}`}
                   className="focus-ring interactive-lift flex-1 flex items-center justify-center gap-2 font-bold py-3 rounded-lg transition text-sm border"
-                  style={{ borderColor: '#0BADE8', color: '#0BADE8', background: '#EBF8FE' }}>
+                  style={{ borderColor: '#2c2a7c', color: '#2c2a7c', background: '#f7fafc' }}>
                   <FileText size={15}/> Yêu cầu báo giá
                 </Link>
                 <a
                   href={`https://zalo.me/share?url=${encodeURIComponent(productUrl)}`}
                   target="_blank" rel="noopener noreferrer"
                   className="focus-ring interactive-lift flex items-center justify-center gap-2 font-bold px-4 py-3 rounded-lg transition text-sm border"
-                  style={{ borderColor: '#cfe7f1', color: '#5a8fa8', background: 'white' }}>
+                  style={{ borderColor: '#e5e8ea', color: '#767778', background: 'white' }}>
                   <Share2 size={15}/> Chia sẻ
                 </a>
               </div>
@@ -241,7 +243,7 @@ export default async function ProductDetailPage({
             <div className="flex flex-wrap gap-2">
               {[t('badge1'), t('badge2'), t('badge3')].map(b => (
                 <span key={b} className="text-xs border px-3 py-1 rounded-full font-medium"
-                  style={{ borderColor: '#b8d9ee', color: '#0A2340', background: 'white' }}>
+                  style={{ borderColor: '#dcdee0', color: '#303030', background: 'white' }}>
                   ✓ {b}
                 </span>
               ))}
@@ -249,16 +251,33 @@ export default async function ProductDetailPage({
           </div>
         </div>
 
+        {/* Thông số kỹ thuật */}
+        <div className="mt-10">
+          <ProductSpecSheet
+            ma_san_pham={p.ma_san_pham}
+            ma_vong_bi={p.ma_vong_bi}
+            duong_kinh_trong={p.duong_kinh_trong}
+            duong_kinh_ngoai={p.duong_kinh_ngoai}
+            chieu_day={p.chieu_day}
+            spec_image_url={p.spec_image_url || null}
+            spec_notes={p.spec_notes || null}
+          />
+        </div>
+
         {/* Mô tả chi tiết */}
-        {p.description && (
-          <div className="detail-panel mt-10 rounded-lg p-6 md:p-7">
-            <h2 className="text-xl font-extrabold mb-5 flex items-center gap-2" style={{ color: '#0A2340' }}>
-              <span className="w-1 h-6 rounded-full inline-block" style={{ background: '#0BADE8' }}/>
+        {(p.description_html || p.description) && (
+          <div className="detail-panel mt-6 rounded-lg p-6 md:p-7">
+            <h2 className="text-xl font-extrabold mb-5 flex items-center gap-2" style={{ color: '#303030' }}>
+              <span className="w-1 h-6 rounded-full inline-block" style={{ background: '#2c2a7c' }}/>
               {t('descTitle')}
             </h2>
-            <div className="text-sm leading-relaxed whitespace-pre-wrap text-slate-600">
-              {p.description}
-            </div>
+            {p.description_html ? (
+              <RichContentViewer html={p.description_html} className="rich-content" />
+            ) : (
+              <p className="text-sm leading-relaxed whitespace-pre-wrap" style={{ color: '#5a5c5e' }}>
+                {p.description}
+              </p>
+            )}
           </div>
         )}
 
@@ -266,8 +285,8 @@ export default async function ProductDetailPage({
         {related.length > 0 && (
           <div className="mt-12">
             <div className="flex items-center gap-3 mb-6">
-              <span className="w-1 h-7 rounded-full" style={{ background: '#0BADE8' }}/>
-              <h2 className="text-xl font-extrabold" style={{ color: '#0A2340' }}>
+              <span className="w-1 h-7 rounded-full" style={{ background: '#2c2a7c' }}/>
+              <h2 className="text-xl font-extrabold" style={{ color: '#303030' }}>
                 Sản phẩm liên quan
               </h2>
             </div>
@@ -280,7 +299,7 @@ export default async function ProductDetailPage({
         <div className="mt-8">
           <Link href="/products"
             className="focus-ring inline-flex items-center gap-1.5 rounded text-sm font-medium hover:underline transition"
-            style={{ color: '#0BADE8' }}>
+            style={{ color: '#2c2a7c' }}>
             {t('back')}
           </Link>
         </div>

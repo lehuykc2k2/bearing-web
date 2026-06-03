@@ -32,6 +32,10 @@ export interface Product {
   chieu_day:         number | null
   // Biến thể (nhiều thương hiệu)
   variants:          ProductVariant[]
+  // Nội dung phong phú HTML
+  description_html:  string
+  spec_image_url:    string
+  spec_notes:        string
   created_at:        string
   updated_at:        string
   category?:         Category

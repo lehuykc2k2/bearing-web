@@ -22,6 +22,9 @@ const base = {
   chieu_day: null,
   images: [] as string[],
   variants: [] as Product['variants'],
+  description_html: '',
+  spec_image_url: '',
+  spec_notes: '',
 }
 
 export const mockProducts: Product[] = [

@@ -23,7 +23,7 @@ const ZaloIcon = () => (
 const MessengerIcon = () => (
   <svg viewBox="0 0 36 36" width="24" height="24" fill="none">
     <path d="M18 2C9.16 2 2 8.7 2 17c0 4.7 2.2 8.9 5.7 11.8V34l5.3-2.9c1.6.4 3.3.6 5 .6 8.84 0 16-6.7 16-15S26.84 2 18 2z" fill="white"/>
-    <path d="M8 21l5.8-6.2 3.7 3.9 5.2-3.9 5.3 6.2-5.7-6.3-3.7 4-3.8-4L8 21z" fill="#E5197E"/>
+    <path d="M8 21l5.8-6.2 3.7 3.9 5.2-3.9 5.3 6.2-5.7-6.3-3.7 4-3.8-4L8 21z" fill="#c51c23"/>
   </svg>
 )
 
@@ -40,14 +40,14 @@ export default function FloatingContact({ phone, zalo, messenger }: Props) {
     phone ? {
       href: `tel:${phone.replace(/\s/g, '')}`,
       label: phone, title: 'Gọi điện',
-      bg: 'linear-gradient(135deg,#0BADE8 0%,#087fb5 100%)', shadow: 'rgba(11,173,232,0.35)', ping: '#0BADE8',
+      bg: 'linear-gradient(135deg,#2c2a7c 0%,#0c3263 100%)', shadow: 'rgba(44,42,124,0.28)', ping: '#2c2a7c',
       icon: <Phone size={20} color="white" strokeWidth={2.5} />,
       external: false,
     } : null,
     messenger ? {
       href: messenger,
       label: 'Messenger', title: 'Messenger',
-      bg: 'linear-gradient(135deg,#E5197E 0%,#b90f63 100%)', shadow: 'rgba(229,25,126,0.35)', ping: '#E5197E',
+      bg: 'linear-gradient(135deg,#c51c23 0%,#94151a 100%)', shadow: 'rgba(197,28,35,0.3)', ping: '#c51c23',
       icon: <MessengerIcon />,
       external: true,
     } : null,
@@ -71,7 +71,7 @@ export default function FloatingContact({ phone, zalo, messenger }: Props) {
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           title="Lên đầu trang"
           className="focus-ring group relative hidden md:flex w-10 h-10 rounded-full items-center justify-center shadow-lg hover:scale-110 active:scale-95 transition-all"
-          style={{ background: 'linear-gradient(135deg,#0A2340 0%,#123b66 100%)' }}>
+          style={{ background: 'linear-gradient(135deg,#303030 0%,#181818 100%)' }}>
           <ChevronUp size={18} color="white" />
           <span className="absolute right-12 bg-gray-900 text-white text-xs font-medium px-2.5 py-1 rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
             Lên đầu

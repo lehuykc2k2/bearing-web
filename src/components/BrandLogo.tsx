@@ -8,10 +8,10 @@ export default function BrandLogo({ variant = 'light', size = 'md', showText = t
   const iconSize = size === 'sm' ? 28 : size === 'lg' ? 44 : 36
   const isLight = variant === 'light'
 
-  const cyan  = '#0BADE8'
-  const pink  = '#E5197E'
+  const cyan  = '#2c2a7c'
+  const pink  = '#c51c23'
   const white = '#ffffff'
-  const dim   = isLight ? 'rgba(255,255,255,0.85)' : '#64748b'
+  const dim   = isLight ? 'rgba(255,255,255,0.85)' : '#767778'
 
   // 6 bearing balls at 60° intervals, radius 10 from center
   const balls = Array.from({ length: 6 }, (_, i) => {
@@ -43,7 +43,7 @@ export default function BrandLogo({ variant = 'light', size = 'md', showText = t
               className="font-black tracking-tight"
               style={{
                 fontSize: size === 'sm' ? 15 : size === 'lg' ? 24 : 19,
-                color: isLight ? white : '#0A2340',
+                color: isLight ? white : cyan,
               }}>
               D
             </span>
@@ -59,7 +59,7 @@ export default function BrandLogo({ variant = 'light', size = 'md', showText = t
               className="font-black tracking-tight"
               style={{
                 fontSize: size === 'sm' ? 15 : size === 'lg' ? 24 : 19,
-                color: isLight ? white : '#0A2340',
+                color: isLight ? white : cyan,
               }}>
               X
             </span>
@@ -69,7 +69,7 @@ export default function BrandLogo({ variant = 'light', size = 'md', showText = t
             className="font-bold uppercase tracking-[0.15em]"
             style={{
               fontSize: size === 'sm' ? 7 : size === 'lg' ? 10 : 8,
-              color: isLight ? 'rgba(11,173,232,0.9)' : dim,
+              color: isLight ? 'rgba(255,255,255,0.78)' : dim,
               marginTop: 1,
             }}>
             Rolling Bearings

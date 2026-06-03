@@ -14,7 +14,7 @@ export default function ProductCard({ product }: { product: Product }) {
       className="product-card focus-ring group rounded-lg overflow-hidden flex flex-col active:scale-[0.98]">
 
       {/* Ảnh */}
-      <div className="relative w-full aspect-square overflow-hidden" style={{ background: 'linear-gradient(135deg,#f8fcfd 0%,#edf7fb 55%,#fff7e8 100%)' }}>
+      <div className="relative w-full aspect-square overflow-hidden" style={{ background: 'linear-gradient(135deg,#ffffff 0%,#eef1f3 55%,#fff5f5 100%)' }}>
         {product.image_url ? (
           <Image
             src={product.image_url} alt={product.name} fill
@@ -28,7 +28,7 @@ export default function ProductCard({ product }: { product: Product }) {
         )}
         {product.category && (
           <span className="absolute top-1.5 left-1.5 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-md leading-tight"
-            style={{ background: 'rgba(10,35,64,0.85)' }}>
+            style={{ background: 'rgba(44,42,124,0.88)' }}>
             {product.category.name}
           </span>
         )}
@@ -36,8 +36,8 @@ export default function ProductCard({ product }: { product: Product }) {
 
       {/* Nội dung */}
       <div className="p-2.5 sm:p-4 flex flex-col flex-1">
-        <h3 className="font-bold text-[11px] sm:text-sm line-clamp-2 leading-snug mb-1 group-hover:text-[#0BADE8] transition-colors"
-          style={{ color: '#0A2340' }}>
+        <h3 className="font-bold text-[11px] sm:text-sm line-clamp-2 leading-snug mb-1 group-hover:text-[#2c2a7c] transition-colors"
+          style={{ color: '#303030' }}>
           {product.name}
         </h3>
         {product.short_description && (
@@ -45,13 +45,13 @@ export default function ProductCard({ product }: { product: Product }) {
             {product.short_description}
           </p>
         )}
-        <div className="mt-auto pt-1.5 border-t" style={{ borderColor: '#e7f3f8' }}>
+        <div className="mt-auto pt-1.5 border-t" style={{ borderColor: '#e5e8ea' }}>
           {product.price > 0 ? (
-            <span className="font-extrabold text-[11px] sm:text-sm" style={{ color: '#0BADE8' }}>
+            <span className="font-extrabold text-[11px] sm:text-sm" style={{ color: '#2c2a7c' }}>
               {formatPrice(product.price)}
             </span>
           ) : (
-            <span className="flex items-center gap-1 text-[10px] sm:text-xs font-semibold" style={{ color: '#E5197E' }}>
+            <span className="flex items-center gap-1 text-[10px] sm:text-xs font-semibold" style={{ color: '#c51c23' }}>
               <Phone size={9}/> Liên hệ
             </span>
           )}

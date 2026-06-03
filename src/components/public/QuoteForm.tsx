@@ -30,55 +30,55 @@ export default function QuoteForm({ productId, productName }: Props) {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label className="block text-xs font-bold mb-1.5 uppercase tracking-wide" style={{ color: '#0A2340' }}>
-            Họ và tên <span style={{ color: '#E5197E' }}>*</span>
+          <label className="block text-xs font-bold mb-1.5 uppercase tracking-wide" style={{ color: '#303030' }}>
+            Họ và tên <span style={{ color: '#c51c23' }}>*</span>
           </label>
           <input
             name="name" type="text" required placeholder="Nguyễn Văn A"
             className="w-full px-3.5 py-2.5 rounded-lg text-sm border focus:outline-none transition"
-            style={{ borderColor: '#cfe7f1', background: '#f8fcfe', color: '#0A2340' }}
-            onFocus={e => e.target.style.borderColor = '#0BADE8'}
-            onBlur={e => e.target.style.borderColor = '#cfe7f1'}
+            style={{ borderColor: '#e5e8ea', background: '#ffffff', color: '#303030' }}
+            onFocus={e => e.target.style.borderColor = '#2c2a7c'}
+            onBlur={e => e.target.style.borderColor = '#e5e8ea'}
           />
         </div>
         <div>
-          <label className="block text-xs font-bold mb-1.5 uppercase tracking-wide" style={{ color: '#0A2340' }}>
-            Số điện thoại <span style={{ color: '#E5197E' }}>*</span>
+          <label className="block text-xs font-bold mb-1.5 uppercase tracking-wide" style={{ color: '#303030' }}>
+            Số điện thoại <span style={{ color: '#c51c23' }}>*</span>
           </label>
           <input
             name="phone" type="tel" required placeholder="0901 234 567"
             className="w-full px-3.5 py-2.5 rounded-lg text-sm border focus:outline-none transition"
-            style={{ borderColor: '#cfe7f1', background: '#f8fcfe', color: '#0A2340' }}
-            onFocus={e => e.target.style.borderColor = '#0BADE8'}
-            onBlur={e => e.target.style.borderColor = '#cfe7f1'}
+            style={{ borderColor: '#e5e8ea', background: '#ffffff', color: '#303030' }}
+            onFocus={e => e.target.style.borderColor = '#2c2a7c'}
+            onBlur={e => e.target.style.borderColor = '#e5e8ea'}
           />
         </div>
       </div>
 
       {productName && (
         <div>
-          <label className="block text-xs font-bold mb-1.5 uppercase tracking-wide" style={{ color: '#0A2340' }}>
+          <label className="block text-xs font-bold mb-1.5 uppercase tracking-wide" style={{ color: '#303030' }}>
             Sản phẩm quan tâm
           </label>
           <input
             name="product_name_display" defaultValue={productName} readOnly
             className="w-full px-3.5 py-2.5 rounded-lg text-sm border"
-            style={{ borderColor: '#cfe7f1', background: '#f1f8fc', color: '#5a8fa8' }}
+            style={{ borderColor: '#e5e8ea', background: '#eef1f3', color: '#767778' }}
           />
         </div>
       )}
 
       <div>
-        <label className="block text-xs font-bold mb-1.5 uppercase tracking-wide" style={{ color: '#0A2340' }}>
+        <label className="block text-xs font-bold mb-1.5 uppercase tracking-wide" style={{ color: '#303030' }}>
           Nội dung / Yêu cầu
         </label>
         <textarea
           name="message" rows={4}
           placeholder="Mô tả nhu cầu, số lượng, thương hiệu mong muốn..."
           className="w-full px-3.5 py-2.5 rounded-lg text-sm border focus:outline-none resize-none transition"
-          style={{ borderColor: '#cfe7f1', background: '#f8fcfe', color: '#0A2340' }}
-          onFocus={e => e.target.style.borderColor = '#0BADE8'}
-          onBlur={e => e.target.style.borderColor = '#cfe7f1'}
+          style={{ borderColor: '#e5e8ea', background: '#ffffff', color: '#303030' }}
+          onFocus={e => e.target.style.borderColor = '#2c2a7c'}
+          onBlur={e => e.target.style.borderColor = '#e5e8ea'}
         />
       </div>
 
@@ -96,7 +96,7 @@ export default function QuoteForm({ productId, productName }: Props) {
       <button
         type="submit" disabled={isPending}
         className="flex items-center justify-center gap-2 font-bold px-6 py-3.5 rounded-lg text-sm text-white transition hover:brightness-105 disabled:opacity-60"
-        style={{ background: 'linear-gradient(135deg,#0BADE8 0%,#087fb5 100%)' }}>
+        style={{ background: 'linear-gradient(135deg,#2c2a7c 0%,#0c3263 100%)' }}>
         <Send size={15}/>
         {isPending ? 'Đang gửi...' : 'Gửi yêu cầu báo giá'}
       </button>

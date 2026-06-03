@@ -56,7 +56,7 @@ export default async function ProductsPage({
     <div className="public-page-bg min-h-screen">
 
       {/* Banner */}
-      <div className="hero-shell relative overflow-hidden text-white">
+      <div className="hero-shell relative overflow-hidden">
         <Image
           src="/hero-bearings-showroom.png"
           alt="Vòng bi công nghiệp"
@@ -67,17 +67,17 @@ export default async function ProductsPage({
         />
         <div className="hero-vignette absolute inset-0" />
         <div className="hero-mesh absolute inset-0" />
-        <div className="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-[#fbfdfe] to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-[#f7fafc] to-transparent" />
 
         <div className="soft-enter relative max-w-5xl mx-auto px-5 py-9 md:py-12 text-center">
-          <p className="text-[10px] font-bold uppercase tracking-[0.22em] mb-2" style={{ color: '#8de4ff' }}>
+          <p className="text-[10px] font-bold uppercase tracking-[0.22em] mb-2" style={{ color: '#2c2a7c' }}>
             {t('bannerLabel')}
           </p>
           <h1 className="text-2xl md:text-3xl font-extrabold mb-1 drop-shadow">
             {currentCat ? currentCat.name : params.q ? `"${params.q}"` : t('pageTitle')}
           </h1>
           {(currentCat || params.q) && (
-            <p className="text-xs md:text-sm" style={{ color: '#b7d7e5' }}>{t('count', { count })}</p>
+            <p className="text-xs md:text-sm" style={{ color: '#565b61' }}>{t('count', { count })}</p>
           )}
         </div>
       </div>
@@ -105,7 +105,7 @@ export default async function ProductsPage({
                   name="sort"
                   defaultValue={params.sort ?? ''}
                   className="focus-ring min-w-0 w-full md:w-auto text-xs font-medium bg-transparent cursor-pointer py-1 pr-1 rounded-md"
-                  style={{ color: '#0A2340' }}>
+                  style={{ color: '#303030' }}>
                   {SORT_OPTIONS.map(o => (
                     <option key={o.value} value={o.value}>{o.label}</option>
                   ))}
@@ -113,7 +113,7 @@ export default async function ProductsPage({
               </div>
               <button type="submit"
                 className="focus-ring text-white font-bold px-5 py-3.5 text-sm transition hover:brightness-105 md:self-stretch"
-                style={{ background: 'linear-gradient(135deg,#0BADE8 0%,#087fb5 100%)' }}>
+                style={{ background: 'linear-gradient(135deg,#2c2a7c 0%,#0c3263 100%)' }}>
                 Tìm
               </button>
             </div>
@@ -124,7 +124,7 @@ export default async function ProductsPage({
             <a href={buildUrl(baseParams, { category: undefined })}
               className="focus-ring shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition whitespace-nowrap"
               style={!params.category
-                ? { background: '#0A2340', color: 'white' }
+                ? { background: '#2c2a7c', color: 'white' }
                 : { background: '#f1f5f9', color: '#475569' }}>
               {t('all')}
             </a>
@@ -132,7 +132,7 @@ export default async function ProductsPage({
               <a key={cat.id} href={buildUrl(baseParams, { category: cat.slug })}
                 className="focus-ring shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold transition whitespace-nowrap"
                 style={params.category === cat.slug
-                  ? { background: '#0BADE8', color: 'white' }
+                  ? { background: '#2c2a7c', color: 'white' }
                   : { background: '#f1f5f9', color: '#475569' }}>
                 {cat.name}
               </a>
@@ -146,12 +146,12 @@ export default async function ProductsPage({
         {count === 0 ? (
           <div className="text-center py-20">
             <Search size={46} className="mx-auto mb-4 text-slate-300" />
-            <p className="font-bold text-lg mb-1" style={{ color: '#0A2340' }}>{t('notFound')}</p>
+            <p className="font-bold text-lg mb-1" style={{ color: '#303030' }}>{t('notFound')}</p>
             <p className="text-sm text-slate-400 mb-6">{t('notFoundSub')}</p>
             {hasFilter && (
               <a href="?"
                 className="focus-ring inline-flex items-center gap-2 text-white font-semibold px-5 py-2.5 rounded-lg text-sm hover:brightness-105 transition"
-                style={{ background: 'linear-gradient(135deg,#0BADE8 0%,#087fb5 100%)' }}>
+                style={{ background: 'linear-gradient(135deg,#2c2a7c 0%,#0c3263 100%)' }}>
                 {t('backToAll')}
               </a>
             )}
