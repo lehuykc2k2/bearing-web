@@ -10,6 +10,7 @@ import StickyCTA from '@/components/public/StickyCTA'
 import ProductImageGallery from '@/components/public/ProductImageGallery'
 import ProductSpecSheet from '@/components/public/ProductSpecSheet'
 import RichContentViewer from '@/components/public/RichContentViewer'
+import BrandLogo from '@/components/BrandLogo'
 import type { Product } from '@/types'
 
 export async function generateMetadata({
@@ -62,6 +63,11 @@ export default async function ProductDetailPage({
         .filter(r => r.id !== p.id)
         .slice(0, 4)
     : []
+
+  const dxVariant   = p.variants?.find(v => /^d&x/i.test(v.thuong_hieu))
+  const agaVariant  = p.variants?.find(v => /^aga$/i.test(v.thuong_hieu))
+  const otherVariants = p.variants?.filter(v => !/^d&x|^aga$/i.test(v.thuong_hieu)) ?? []
+  const dxOutOfStock  = !!dxVariant && dxVariant.ton_kho === 'Hết hàng'
 
   const BASE = 'https://bearing-web.vercel.app'
   const productUrl = `${BASE}/${locale}/products/${p.id}`
@@ -159,32 +165,141 @@ export default async function ProductDetailPage({
               </div>
             )}
 
-            {/* Variants (nhiều thương hiệu) */}
+            {/* Brand blocks — D&X chính / AGA thay thế / brands khác */}
             {p.variants?.length > 0 ? (
-              <div className="detail-panel rounded-lg overflow-hidden">
-                <div className="px-4 py-2.5 text-xs font-bold uppercase tracking-wider" style={{ background: 'linear-gradient(90deg,#f7fafc 0%,#fff5f5 100%)', color: '#767778' }}>
-                  Bảng giá theo thương hiệu
-                </div>
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="border-b" style={{ borderColor: '#e5e8ea' }}>
-                      <th className="text-left px-4 py-2 text-xs font-semibold text-slate-500">Thương hiệu</th>
-                      <th className="text-left px-4 py-2 text-xs font-semibold text-slate-500">Giá</th>
-                      <th className="text-left px-4 py-2 text-xs font-semibold text-slate-500">Tồn kho</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {p.variants.map((v, i) => (
-                      <tr key={i} className="border-b last:border-0" style={{ borderColor: '#e5e8ea' }}>
-                        <td className="px-4 py-2.5 font-bold" style={{ color: '#303030' }}>{v.thuong_hieu}</td>
-                        <td className="px-4 py-2.5 font-extrabold" style={{ color: '#2c2a7c' }}>
-                          {v.gia > 0 ? formatPrice(v.gia, locale) : <span className="text-sm font-semibold italic" style={{ color: '#c51c23' }}>Liên hệ</span>}
-                        </td>
-                        <td className="px-4 py-2.5 text-slate-500 text-xs">{v.ton_kho || '—'}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+              <div className="flex flex-col gap-3">
+
+                {/* D&X block */}
+                {dxVariant && (
+                  <div className="rounded-xl border-2 overflow-hidden transition-all"
+                    style={{ borderColor: dxOutOfStock ? '#e5e8ea' : '#2c2a7c' }}>
+                    <div className="px-4 py-2.5 flex items-center justify-between"
+                      style={{ background: dxOutOfStock ? '#f7fafc' : '#2c2a7c' }}>
+                      <div className="flex items-center gap-2.5">
+                        <BrandLogo
+                          variant={dxOutOfStock ? 'dark' : 'light'}
+                          size="sm"
+                        />
+                        <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full"
+                          style={{ background: dxOutOfStock ? '#f1f5f9' : 'rgba(255,255,255,0.18)', color: dxOutOfStock ? '#767778' : 'rgba(255,255,255,0.9)' }}>
+                          Phân phối chính hãng
+                        </span>
+                      </div>
+                      <span className="text-xs font-bold px-2.5 py-1 rounded-full"
+                        style={{
+                          background: dxOutOfStock ? '#fee2e2' : 'rgba(255,255,255,0.2)',
+                          color: dxOutOfStock ? '#c51c23' : 'white',
+                        }}>
+                        {dxOutOfStock ? 'Tạm hết hàng' : (dxVariant.ton_kho || 'Còn hàng')}
+                      </span>
+                    </div>
+                    <div className="px-4 py-3.5" style={{ background: dxOutOfStock ? '#fafafa' : '#f0f4ff' }}>
+                      {dxVariant.gia > 0 ? (
+                        <span className="text-3xl font-black" style={{ color: dxOutOfStock ? '#94a3b8' : '#2c2a7c' }}>
+                          {formatPrice(dxVariant.gia, locale)}
+                        </span>
+                      ) : (
+                        <span className="font-semibold italic text-sm" style={{ color: dxOutOfStock ? '#94a3b8' : '#c51c23' }}>
+                          Liên hệ để có giá tốt nhất
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* AGA block */}
+                {agaVariant && (
+                  <div className="rounded-xl border-2 overflow-hidden transition-all"
+                    style={{ borderColor: dxOutOfStock ? '#ea580c' : '#e5e8ea' }}>
+                    <div className="px-4 py-2.5 flex items-center justify-between"
+                      style={{ background: dxOutOfStock ? '#ea580c' : '#f7fafc' }}>
+                      <div className="flex items-center gap-2">
+                        <span className="font-extrabold text-sm" style={{ color: dxOutOfStock ? 'white' : '#475569' }}>
+                          AGA
+                        </span>
+                        <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full"
+                          style={{
+                            background: dxOutOfStock ? 'rgba(255,255,255,0.22)' : '#f1f5f9',
+                            color: dxOutOfStock ? 'white' : '#64748b',
+                          }}>
+                          {dxOutOfStock ? 'Sẵn hàng thay thế' : 'Tùy chọn thay thế'}
+                        </span>
+                      </div>
+                      <span className="text-xs font-medium" style={{ color: dxOutOfStock ? 'rgba(255,255,255,0.85)' : '#94a3b8' }}>
+                        {agaVariant.ton_kho || '—'}
+                      </span>
+                    </div>
+                    <div className="px-4 py-3.5 flex items-center justify-between"
+                      style={{ background: dxOutOfStock ? '#fff7ed' : 'white' }}>
+                      {agaVariant.gia > 0 ? (
+                        <span className="text-2xl font-bold" style={{ color: dxOutOfStock ? '#ea580c' : '#64748b' }}>
+                          {formatPrice(agaVariant.gia, locale)}
+                        </span>
+                      ) : (
+                        <span className="text-sm font-semibold italic" style={{ color: '#94a3b8' }}>Liên hệ</span>
+                      )}
+                      {dxOutOfStock && (
+                        <span className="text-xs px-2 py-1 rounded-md font-medium"
+                          style={{ background: '#fde68a', color: '#92400e' }}>
+                          Chất lượng tương đương
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Brands khác: NSK, SKF, FAG... */}
+                {otherVariants.length > 0 && (
+                  <div className="detail-panel rounded-xl overflow-hidden">
+                    <div className="px-4 py-2 text-xs font-bold uppercase tracking-wider"
+                      style={{ background: '#f7fafc', color: '#94a3b8' }}>
+                      Thương hiệu khác
+                    </div>
+                    <table className="w-full text-sm">
+                      <tbody>
+                        {otherVariants.map((v, i) => (
+                          <tr key={i} className="border-b last:border-0" style={{ borderColor: '#e5e8ea' }}>
+                            <td className="px-4 py-2.5 font-bold" style={{ color: '#303030' }}>{v.thuong_hieu}</td>
+                            <td className="px-4 py-2.5 font-extrabold" style={{ color: '#2c2a7c' }}>
+                              {v.gia > 0 ? formatPrice(v.gia, locale) : <span className="text-sm font-semibold italic" style={{ color: '#c51c23' }}>Liên hệ</span>}
+                            </td>
+                            <td className="px-4 py-2.5 text-xs text-slate-400">{v.ton_kho || '—'}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+
+                {/* Fallback: variants không phải D&X/AGA và không có block riêng */}
+                {!dxVariant && !agaVariant && otherVariants.length === 0 && (
+                  <div className="detail-panel rounded-xl overflow-hidden">
+                    <div className="px-4 py-2.5 text-xs font-bold uppercase tracking-wider"
+                      style={{ background: 'linear-gradient(90deg,#f7fafc 0%,#fff5f5 100%)', color: '#767778' }}>
+                      Bảng giá theo thương hiệu
+                    </div>
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="border-b" style={{ borderColor: '#e5e8ea' }}>
+                          <th className="text-left px-4 py-2 text-xs font-semibold text-slate-500">Thương hiệu</th>
+                          <th className="text-left px-4 py-2 text-xs font-semibold text-slate-500">Giá</th>
+                          <th className="text-left px-4 py-2 text-xs font-semibold text-slate-500">Tồn kho</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {p.variants.map((v, i) => (
+                          <tr key={i} className="border-b last:border-0" style={{ borderColor: '#e5e8ea' }}>
+                            <td className="px-4 py-2.5 font-bold" style={{ color: '#303030' }}>{v.thuong_hieu}</td>
+                            <td className="px-4 py-2.5 font-extrabold" style={{ color: '#2c2a7c' }}>
+                              {v.gia > 0 ? formatPrice(v.gia, locale) : <span className="text-sm font-semibold italic" style={{ color: '#c51c23' }}>Liên hệ</span>}
+                            </td>
+                            <td className="px-4 py-2.5 text-slate-500 text-xs">{v.ton_kho || '—'}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
               </div>
             ) : (
               /* Giá đơn */

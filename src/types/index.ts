@@ -42,13 +42,18 @@ export interface Product {
 }
 
 export interface Settings {
-  shop_name:    string
-  slogan:       string
-  phone:        string
-  address:      string
-  zalo:         string
-  facebook:     string
-  messenger:    string
-  banner_title: string
-  banner_sub:   string
+  shop_name:           string
+  company_name:        string
+  slogan:              string
+  company_description: string
+  phone:               string
+  email:               string
+  tax_code:            string
+  address:             string
+  business_hours:      string
+  zalo:                string
+  facebook:            string
+  messenger:           string
+  banner_title:        string
+  banner_sub:          string
 }

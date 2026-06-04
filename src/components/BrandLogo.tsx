@@ -1,81 +1,53 @@
+import Image from 'next/image'
+
 interface Props {
   variant?: 'light' | 'dark'
   size?: 'sm' | 'md' | 'lg'
   showText?: boolean
 }
 
+const logoSources = {
+  light: {
+    src: '/logo-white-cropped.png',
+    width: 1065,
+    height: 396,
+  },
+  dark: {
+    src: '/logo-blue-cropped.png',
+    width: 1098,
+    height: 422,
+  },
+} as const
+
+const logoSizes = {
+  sm: { width: 112, height: 43 },
+  md: { width: 142, height: 55 },
+  lg: { width: 190, height: 73 },
+} as const
+
+const compactSizes = {
+  sm: { width: 88, height: 34 },
+  md: { width: 112, height: 43 },
+  lg: { width: 146, height: 56 },
+} as const
+
 export default function BrandLogo({ variant = 'light', size = 'md', showText = true }: Props) {
-  const iconSize = size === 'sm' ? 28 : size === 'lg' ? 44 : 36
-  const isLight = variant === 'light'
-
-  const cyan  = '#2c2a7c'
-  const pink  = '#c51c23'
-  const white = '#ffffff'
-  const dim   = isLight ? 'rgba(255,255,255,0.85)' : '#767778'
-
-  // 6 bearing balls at 60° intervals, radius 10 from center
-  const balls = Array.from({ length: 6 }, (_, i) => {
-    const angle = (i * 60 - 90) * (Math.PI / 180)
-    return { cx: 16 + 10 * Math.cos(angle), cy: 16 + 10 * Math.sin(angle), pink: i % 2 === 1 }
-  })
+  const logo = logoSources[variant]
+  const dimensions = showText ? logoSizes[size] : compactSizes[size]
 
   return (
-    <div className="flex items-center gap-2.5 select-none">
-      {/* Bearing icon */}
-      <svg width={iconSize} height={iconSize} viewBox="0 0 32 32" fill="none" aria-hidden="true">
-        {/* Outer ring */}
-        <circle cx="16" cy="16" r="14.5" stroke={cyan} strokeWidth="2.2" />
-        {/* Inner ring */}
-        <circle cx="16" cy="16" r="5.5" stroke={cyan} strokeWidth="1.8" />
-        {/* Bearing balls */}
-        {balls.map((b, i) => (
-          <circle key={i} cx={b.cx} cy={b.cy} r="2.3" fill={b.pink ? pink : cyan} />
-        ))}
-        {/* Center dot */}
-        <circle cx="16" cy="16" r="1.5" fill={isLight ? white : cyan} />
-      </svg>
-
-      {showText && (
-        <div className="leading-none">
-          {/* D&X */}
-          <div className="flex items-baseline gap-0.5">
-            <span
-              className="font-black tracking-tight"
-              style={{
-                fontSize: size === 'sm' ? 15 : size === 'lg' ? 24 : 19,
-                color: isLight ? white : cyan,
-              }}>
-              D
-            </span>
-            <span
-              className="font-black"
-              style={{
-                fontSize: size === 'sm' ? 14 : size === 'lg' ? 22 : 18,
-                color: pink,
-              }}>
-              &amp;
-            </span>
-            <span
-              className="font-black tracking-tight"
-              style={{
-                fontSize: size === 'sm' ? 15 : size === 'lg' ? 24 : 19,
-                color: isLight ? white : cyan,
-              }}>
-              X
-            </span>
-          </div>
-          {/* Subtitle */}
-          <div
-            className="font-bold uppercase tracking-[0.15em]"
-            style={{
-              fontSize: size === 'sm' ? 7 : size === 'lg' ? 10 : 8,
-              color: isLight ? 'rgba(255,255,255,0.78)' : dim,
-              marginTop: 1,
-            }}>
-            Rolling Bearings
-          </div>
-        </div>
-      )}
-    </div>
+    <span
+      className="relative block shrink-0 select-none"
+      style={{ width: dimensions.width, height: dimensions.height }}>
+      <Image
+        src={logo.src}
+        alt={showText ? 'D&X Bearings' : 'D&X'}
+        width={logo.width}
+        height={logo.height}
+        sizes={`${dimensions.width}px`}
+        priority={size !== 'lg'}
+        className="block h-full w-full object-contain"
+      />
+    </span>
   )
 }

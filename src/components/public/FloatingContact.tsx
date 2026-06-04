@@ -29,11 +29,34 @@ const MessengerIcon = () => (
 
 export default function FloatingContact({ phone, zalo, messenger }: Props) {
   const [showScroll, setShowScroll] = useState(false)
+  const [footerVisible, setFooterVisible] = useState(false)
 
   useEffect(() => {
     const onScroll = () => setShowScroll(window.scrollY > 300)
     window.addEventListener('scroll', onScroll)
     return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  useEffect(() => {
+    const footer = document.querySelector('footer')
+    if (!footer) return
+
+    const updateFooterVisibility = () => {
+      const { top } = footer.getBoundingClientRect()
+      setFooterVisible(top < window.innerHeight - 24)
+    }
+
+    updateFooterVisibility()
+    requestAnimationFrame(updateFooterVisibility)
+    const timeout = window.setTimeout(updateFooterVisibility, 300)
+    window.addEventListener('scroll', updateFooterVisibility)
+    window.addEventListener('resize', updateFooterVisibility)
+
+    return () => {
+      window.clearTimeout(timeout)
+      window.removeEventListener('scroll', updateFooterVisibility)
+      window.removeEventListener('resize', updateFooterVisibility)
+    }
   }, [])
 
   const buttons = ([
@@ -63,7 +86,7 @@ export default function FloatingContact({ phone, zalo, messenger }: Props) {
   if (!buttons.length) return null
 
   return (
-    <div className="fixed bottom-6 right-4 z-40 hidden md:flex flex-col items-center gap-2.5">
+    <div className={`fixed ${footerVisible ? 'bottom-56' : 'bottom-6'} right-4 z-40 hidden md:flex flex-col items-center gap-2.5 transition-[bottom] duration-200`}>
 
       {/* Scroll to top — chỉ desktop */}
       {showScroll && (

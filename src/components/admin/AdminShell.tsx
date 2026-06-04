@@ -99,11 +99,9 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
           <button onClick={() => setOpen(!open)} className="text-slate-600">
             {open ? <X size={20}/> : <Menu size={20}/>}
           </button>
-          <div className="flex items-center gap-2">
-            <div className="rounded-lg px-1 py-0.5" style={{ background: '#0A2340' }}>
-              <BrandLogo variant="light" size="sm" showText={false} />
-            </div>
-            <span className="font-bold text-sm text-slate-800">D&amp;X Admin</span>
+          <div className="flex items-center gap-3">
+            <BrandLogo variant="dark" size="sm" />
+            <span className="font-bold text-sm text-slate-800">Admin</span>
           </div>
         </div>
 

@@ -14,11 +14,13 @@ export default async function AdminSettingsPage() {
 
   return (
     <AdminShell>
-      <div className="mb-5">
-        <h1 className="text-xl font-bold text-slate-800">Cài đặt shop</h1>
-        <p className="text-sm text-slate-400 mt-0.5">Thay đổi hiển thị ngay trên trang khách hàng</p>
+      <div className="max-w-6xl">
+        <div className="mb-5">
+          <h1 className="text-xl font-bold text-slate-800">Cài đặt shop</h1>
+          <p className="text-sm text-slate-400 mt-0.5">Thay đổi hiển thị ngay trên trang khách hàng</p>
+        </div>
+        <SettingsForm initialValues={map} />
       </div>
-      <SettingsForm initialValues={map} />
     </AdminShell>
   )
 }

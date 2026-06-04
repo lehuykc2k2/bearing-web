@@ -18,6 +18,8 @@ function toSlug(text: string) {
 }
 
 const INPUT = "w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#2c2a7c] focus:ring-1 focus:ring-[#2c2a7c]/20 transition bg-white text-slate-800 placeholder-slate-400"
+const BRANDS    = ['D&X', 'AGA', 'NSK', 'SKF', 'FAG', 'NTN', 'KOYO', 'INA', 'NACHI', 'TIMKEN']
+const TON_KHO   = ['Còn hàng', 'Hết hàng', 'Sắp về hàng', 'Liên hệ']
 const LABEL = "block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5"
 
 function Card({ title, children, hint }: { title: string; hint?: string; children: React.ReactNode }) {
@@ -100,10 +102,33 @@ export default function ProductForm({ categories, product }: Props) {
     setImages(prev => prev.filter((_, i) => i !== index))
   }
 
-  function addVariant()    { setVariants(v => [...v, { thuong_hieu: '', gia: 0, ton_kho: '' }]) }
+  function addVariant() { setVariants(v => [...v, { thuong_hieu: '', gia: 0, ton_kho: 'Còn hàng' }]) }
+  function addDxAga() {
+    setVariants(v => {
+      const hasDx  = v.some(x => x.thuong_hieu === 'D&X')
+      const hasAga = v.some(x => x.thuong_hieu === 'AGA')
+      const next = [...v]
+      if (!hasDx)  next.push({ thuong_hieu: 'D&X', gia: 0, ton_kho: 'Còn hàng' })
+      if (!hasAga) next.push({ thuong_hieu: 'AGA', gia: 0, ton_kho: 'Còn hàng' })
+      return next
+    })
+  }
   function removeVariant(i: number) { setVariants(v => v.filter((_, idx) => idx !== i)) }
   function updateVariant(i: number, field: keyof ProductVariant, value: string | number) {
     setVariants(v => v.map((item, idx) => idx === i ? { ...item, [field]: value } : item))
+  }
+
+  function autoShortDesc() {
+    if (shortDesc.trim()) return
+    const catName = categories.find(c => c.id === categoryId)?.name ?? ''
+    const parts = [
+      maVB && `Vòng bi ${maVB}`,
+      catName,
+      dkTrong && `d${dkTrong}mm`,
+      dkNgoai && `D${dkNgoai}mm`,
+      chieuDay && `B${chieuDay}mm`,
+    ].filter(Boolean)
+    if (parts.length) setShortDesc(parts.join(' · '))
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -155,7 +180,14 @@ export default function ProductForm({ categories, product }: Props) {
                   className={INPUT} placeholder="VD: Vòng bi 6205 NSK"/>
               </div>
               <div>
-                <label className={LABEL}>Mô tả ngắn</label>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className={LABEL} style={{ marginBottom: 0 }}>Mô tả ngắn</label>
+                  <button type="button" onClick={autoShortDesc}
+                    className="text-[10px] font-semibold px-2 py-0.5 rounded transition hover:opacity-80"
+                    style={{ background: '#f0f4ff', color: '#2c2a7c' }}>
+                    ✦ Tự điền
+                  </button>
+                </div>
                 <input type="text" value={shortDesc} onChange={e => setShortDesc(e.target.value)}
                   className={INPUT} placeholder="1–2 dòng tóm tắt hiển thị trên card sản phẩm"/>
               </div>
@@ -260,36 +292,65 @@ export default function ProductForm({ categories, product }: Props) {
               </p>
             ) : (
               <div className="mb-3">
-                <div className="grid grid-cols-[1fr_110px_120px_36px] gap-2 px-1 mb-1.5">
+                <div className="hidden sm:grid sm:grid-cols-[1fr_120px_130px_36px] gap-2 px-1 mb-1.5">
                   <span className="text-xs font-semibold text-slate-400">Thương hiệu</span>
                   <span className="text-xs font-semibold text-slate-400">Giá (VND)</span>
                   <span className="text-xs font-semibold text-slate-400">Tồn kho</span>
                 </div>
                 <div className="space-y-2">
                   {variants.map((v, i) => (
-                    <div key={i} className="grid grid-cols-[1fr_110px_120px_36px] gap-2 items-center bg-slate-50 rounded-lg px-2.5 py-2">
-                      <input type="text" value={v.thuong_hieu}
-                        onChange={e => updateVariant(i, 'thuong_hieu', e.target.value)}
-                        className={INPUT} placeholder="NSK, SKF, FAG..."/>
-                      <input type="number" min="0" value={v.gia || ''}
-                        onChange={e => updateVariant(i, 'gia', parseInt(e.target.value) || 0)}
-                        className={INPUT} placeholder="35000"/>
-                      <input type="text" value={v.ton_kho}
-                        onChange={e => updateVariant(i, 'ton_kho', e.target.value)}
-                        className={INPUT} placeholder="Còn hàng"/>
-                      <button type="button" onClick={() => removeVariant(i)}
-                        className="w-8 h-8 flex items-center justify-center rounded-lg text-slate-300 hover:text-red-500 hover:bg-red-50 transition border border-transparent hover:border-red-100">
-                        <Trash2 size={14}/>
-                      </button>
+                    <div key={i} className="flex flex-col sm:grid sm:grid-cols-[1fr_120px_130px_36px] gap-2 bg-slate-50 rounded-lg px-2.5 py-2">
+                      <div className="flex flex-col gap-1 sm:contents">
+                        <label className="text-[10px] font-semibold text-slate-400 sm:hidden">Thương hiệu</label>
+                        <select value={v.thuong_hieu}
+                          onChange={e => updateVariant(i, 'thuong_hieu', e.target.value)}
+                          className={INPUT + ' bg-white'}>
+                          <option value="">— Chọn —</option>
+                          {BRANDS.map(b => (
+                            <option key={b} value={b}
+                              style={b === 'D&X' ? { fontWeight: 700, color: '#2c2a7c' } : b === 'AGA' ? { fontWeight: 700 } : {}}>
+                              {b === 'D&X' ? '★ D&X (Chính hãng)' : b === 'AGA' ? '◎ AGA (Thay thế)' : b}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className="flex gap-2 sm:contents items-end">
+                        <div className="flex flex-col gap-1 flex-1 sm:contents">
+                          <label className="text-[10px] font-semibold text-slate-400 sm:hidden">Giá (VND)</label>
+                          <input type="number" min="0" value={v.gia || ''}
+                            onChange={e => updateVariant(i, 'gia', parseInt(e.target.value) || 0)}
+                            className={INPUT} placeholder="35000"/>
+                        </div>
+                        <div className="flex flex-col gap-1 flex-1 sm:contents">
+                          <label className="text-[10px] font-semibold text-slate-400 sm:hidden">Tồn kho</label>
+                          <select value={v.ton_kho}
+                            onChange={e => updateVariant(i, 'ton_kho', e.target.value)}
+                            className={INPUT + ' bg-white'}>
+                            <option value="">— Tồn kho —</option>
+                            {TON_KHO.map(s => <option key={s} value={s}>{s}</option>)}
+                          </select>
+                        </div>
+                        <button type="button" onClick={() => removeVariant(i)}
+                          className="w-8 h-8 shrink-0 flex items-center justify-center rounded-lg text-slate-300 hover:text-red-500 hover:bg-red-50 transition border border-transparent hover:border-red-100">
+                          <Trash2 size={14}/>
+                        </button>
+                      </div>
                     </div>
                   ))}
                 </div>
               </div>
             )}
-            <button type="button" onClick={addVariant}
-              className="flex items-center gap-2 text-sm font-semibold px-3 py-2 rounded-lg border border-dashed transition hover:bg-slate-50 border-slate-300 text-slate-600">
-              <Plus size={15}/> Thêm biến thể
-            </button>
+            <div className="flex flex-wrap gap-2">
+              <button type="button" onClick={addDxAga}
+                className="flex items-center gap-1.5 text-sm font-bold px-3 py-2 rounded-lg border-2 transition hover:opacity-90"
+                style={{ borderColor: '#2c2a7c', color: '#2c2a7c', background: '#f0f4ff' }}>
+                ⚡ D&X &amp; AGA
+              </button>
+              <button type="button" onClick={addVariant}
+                className="flex items-center gap-2 text-sm font-semibold px-3 py-2 rounded-lg border border-dashed transition hover:bg-slate-50 border-slate-300 text-slate-600">
+                <Plus size={15}/> Thêm thủ công
+              </button>
+            </div>
           </Card>
         </div>
 

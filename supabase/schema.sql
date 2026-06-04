@@ -11,15 +11,20 @@ CREATE TABLE IF NOT EXISTS settings (
 );
 
 INSERT INTO settings (key, value) VALUES
-  ('shop_name',    'D&X Bearings'),
-  ('slogan',       'More Stable – More Efficient – More At Ease'),
-  ('phone',        '0909 123 456'),
-  ('address',      '123 Đường Công Nghiệp, KCN Tân Bình, TP.HCM'),
-  ('zalo',         '0909123456'),
-  ('facebook',     ''),
-  ('messenger',    ''),
-  ('banner_title', 'D&X Rolling Bearings'),
-  ('banner_sub',   'Chuyên cung cấp vòng bi chính hãng – Ổn định, hiệu quả, bền bỉ')
+  ('shop_name',           'D&X Bearings'),
+  ('company_name',        'CÔNG TY TNHH THIẾT BỊ CÔNG NGHIỆP AGA'),
+  ('slogan',              'More Stable – More Efficient – More At Ease'),
+  ('company_description', 'Chuyên Kinh doanh và Phân Phối Vòng bi chính hãng.'),
+  ('phone',               '0977.209.391 hoặc 0972.071.512'),
+  ('email',               'aga.vongbi@gmail.com'),
+  ('tax_code',            '0977209391'),
+  ('address',             '123 Đường Công Nghiệp, KCN Tân Bình, TP.HCM'),
+  ('business_hours',      '8h-17h Thứ 2 - Thứ 7'),
+  ('zalo',                '0977209391'),
+  ('facebook',            ''),
+  ('messenger',           ''),
+  ('banner_title',        'D&X Rolling Bearings'),
+  ('banner_sub',          'Chuyên cung cấp vòng bi chính hãng – Ổn định, hiệu quả, bền bỉ')
 ON CONFLICT (key) DO NOTHING;
 
 -- ── 2. DANH MỤC ───────────────────────────────
