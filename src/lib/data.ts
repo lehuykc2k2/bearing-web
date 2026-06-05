@@ -33,6 +33,7 @@ export async function getProducts(opts: {
   categorySlug?: string
   q?: string
   sort?: string
+  brand?: string
   categories?: Category[]
 }): Promise<Product[]> {
   try {
@@ -47,6 +48,7 @@ export async function getProducts(opts: {
       if (!cat) return []
       query = query.eq('category_id', cat.id)
     }
+    if (opts.brand) query = query.eq('brand', opts.brand)
     if (opts.q) query = query.ilike('name', `%${opts.q}%`)
 
     if (opts.sort === 'price_asc') query = query.order('price', { ascending: true })

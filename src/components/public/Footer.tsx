@@ -2,10 +2,10 @@ import { Phone, MapPin, MessageCircle, Clock, ChevronRight, FileText, Mail } fro
 import type { ElementType } from 'react'
 import { Link } from '@/i18n/navigation'
 import { getTranslations } from 'next-intl/server'
-import type { Settings } from '@/types'
+import type { Settings, SalesContact } from '@/types'
 import BrandLogo from '@/components/BrandLogo'
 
-export default async function Footer({ settings }: { settings: Settings }) {
+export default async function Footer({ settings, contacts = [] }: { settings: Settings; contacts?: SalesContact[] }) {
   const t = await getTranslations('footer')
   const tn = await getTranslations('nav')
   const companyName = settings.company_name || settings.shop_name
@@ -35,24 +35,20 @@ export default async function Footer({ settings }: { settings: Settings }) {
             <p className="text-white font-bold text-lg">{t('ctaTitle')}</p>
             <p className="text-white/80 text-sm">{t('ctaSub')}</p>
           </div>
-          <div className="flex flex-wrap justify-center sm:justify-end gap-3">
-            {settings.phone && (
-              <a
-                href={`tel:${settings.phone.replace(/\s/g, '')}`}
-                className="focus-ring interactive-lift font-bold px-5 py-2.5 rounded-lg text-sm flex items-center gap-2 text-white"
-                style={{ background: 'rgba(255,255,255,0.16)' }}
-              >
-                <Phone size={15} /> {settings.phone}
+          <div className="flex flex-wrap justify-center sm:justify-end gap-2">
+            {(contacts.length > 0 ? contacts : settings.phone ? [{ id: '0', name: settings.phone, phone: settings.phone, zalo: settings.zalo, role: '', sort_order: 0, is_active: true }] : []).map(c => (
+              <a key={c.id}
+                href={`tel:${c.phone.replace(/\s/g, '')}`}
+                className="focus-ring interactive-lift font-bold px-4 py-2.5 rounded-lg text-sm flex items-center gap-2 text-white"
+                style={{ background: 'rgba(255,255,255,0.16)' }}>
+                <Phone size={14}/> {c.name || c.phone}
               </a>
-            )}
-            {settings.zalo && (
-              <a
-                href={`https://zalo.me/${settings.zalo}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="focus-ring border-2 border-white text-white font-bold px-5 py-2.5 rounded-lg text-sm flex items-center gap-2 hover:bg-white/10 transition"
-              >
-                <MessageCircle size={15} /> {t('zaloNow')}
+            ))}
+            {(contacts[0]?.zalo || settings.zalo) && (
+              <a href={`https://zalo.me/${contacts[0]?.zalo || settings.zalo}`}
+                target="_blank" rel="noopener noreferrer"
+                className="focus-ring border-2 border-white text-white font-bold px-4 py-2.5 rounded-lg text-sm flex items-center gap-2 hover:bg-white/10 transition">
+                <MessageCircle size={14}/> {t('zaloNow')}
               </a>
             )}
           </div>

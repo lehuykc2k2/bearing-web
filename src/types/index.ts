@@ -16,6 +16,7 @@ export interface Product {
   id:                string
   name:              string
   slug:              string
+  brand:             string         // 'D&X' | 'AGA' | ''
   price:             number         // giá mặc định (dùng khi không có variants)
   short_description: string
   description:       string
@@ -39,6 +40,17 @@ export interface Product {
   created_at:        string
   updated_at:        string
   category?:         Category
+}
+
+export interface SalesContact {
+  id:         string
+  name:       string
+  phone:      string
+  zalo:       string
+  role:       string
+  sort_order: number
+  is_active:  boolean
+  created_at: string
 }
 
 export interface Settings {

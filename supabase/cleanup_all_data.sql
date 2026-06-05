@@ -1,0 +1,8 @@
+-- Xóa sạch toàn bộ dữ liệu test
+-- Chạy trong Supabase SQL Editor
+
+TRUNCATE TABLE quote_requests   RESTART IDENTITY CASCADE;
+TRUNCATE TABLE sales_contacts   RESTART IDENTITY CASCADE;
+TRUNCATE TABLE products         RESTART IDENTITY CASCADE;
+TRUNCATE TABLE categories       RESTART IDENTITY CASCADE;
+TRUNCATE TABLE settings         RESTART IDENTITY CASCADE;

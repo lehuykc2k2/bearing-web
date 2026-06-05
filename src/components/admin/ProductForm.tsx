@@ -1,9 +1,10 @@
 'use client'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { Plus, Trash2, ImageIcon, X } from 'lucide-react'
 import { createClient } from '@/lib/supabase'
+import { uploadToCloudinary } from '@/lib/cloudinary'
 import type { Category, Product, ProductVariant } from '@/types'
 import RichTextEditor from './RichTextEditor'
 
@@ -18,7 +19,7 @@ function toSlug(text: string) {
 }
 
 const INPUT = "w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#2c2a7c] focus:ring-1 focus:ring-[#2c2a7c]/20 transition bg-white text-slate-800 placeholder-slate-400"
-const BRANDS    = ['D&X', 'AGA', 'NSK', 'SKF', 'FAG', 'NTN', 'KOYO', 'INA', 'NACHI', 'TIMKEN']
+const BRANDS    = ['NSK', 'SKF', 'FAG', 'NTN', 'KOYO', 'INA', 'NACHI', 'TIMKEN']
 const TON_KHO   = ['Còn hàng', 'Hết hàng', 'Sắp về hàng', 'Liên hệ']
 const LABEL = "block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1.5"
 
@@ -46,6 +47,7 @@ export default function ProductForm({ categories, product }: Props) {
   const router = useRouter()
   const isEdit = !!product
 
+  const [brand,         setBrand]         = useState(product?.brand ?? '')
   const [name,          setName]          = useState(product?.name ?? '')
   const [categoryId,    setCategoryId]    = useState(product?.category_id ?? '')
   const [shortDesc,     setShortDesc]     = useState(product?.short_description ?? '')
@@ -69,32 +71,29 @@ export default function ProductForm({ categories, product }: Props) {
   const [uploading,     setUploading]     = useState(false)
   const [saving,        setSaving]        = useState(false)
   const [error,         setError]         = useState('')
+  const productImagesInputRef = useRef<HTMLInputElement>(null)
 
   async function uploadImages(files: FileList) {
     setUploading(true); setError('')
-    const supabase = createClient()
-    const urls: string[] = []
-    for (const file of Array.from(files)) {
-      const ext = file.name.split('.').pop()
-      const path = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
-      const { error: upErr } = await supabase.storage.from('products').upload(path, file, { upsert: true })
-      if (upErr) { setError('Upload ảnh thất bại'); setUploading(false); return }
-      const { data } = supabase.storage.from('products').getPublicUrl(path)
-      urls.push(data.publicUrl)
+    try {
+      const urls = await Promise.all(
+        Array.from(files).map(f => uploadToCloudinary(f, 'bearings/products'))
+      )
+      setImages(prev => [...prev, ...urls])
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Upload ảnh thất bại')
     }
-    setImages(prev => [...prev, ...urls])
     setUploading(false)
   }
 
   async function uploadSpecImage(file: File) {
     setUploading(true); setError('')
-    const supabase = createClient()
-    const ext = file.name.split('.').pop()
-    const path = `specs/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
-    const { error: upErr } = await supabase.storage.from('products').upload(path, file, { upsert: true })
-    if (upErr) { setError('Upload ảnh thông số thất bại'); setUploading(false); return }
-    const { data } = supabase.storage.from('products').getPublicUrl(path)
-    setSpecImageUrl(data.publicUrl)
+    try {
+      const url = await uploadToCloudinary(file, 'bearings/specs')
+      setSpecImageUrl(url)
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Upload ảnh thông số thất bại')
+    }
     setUploading(false)
   }
 
@@ -103,16 +102,6 @@ export default function ProductForm({ categories, product }: Props) {
   }
 
   function addVariant() { setVariants(v => [...v, { thuong_hieu: '', gia: 0, ton_kho: 'Còn hàng' }]) }
-  function addDxAga() {
-    setVariants(v => {
-      const hasDx  = v.some(x => x.thuong_hieu === 'D&X')
-      const hasAga = v.some(x => x.thuong_hieu === 'AGA')
-      const next = [...v]
-      if (!hasDx)  next.push({ thuong_hieu: 'D&X', gia: 0, ton_kho: 'Còn hàng' })
-      if (!hasAga) next.push({ thuong_hieu: 'AGA', gia: 0, ton_kho: 'Còn hàng' })
-      return next
-    })
-  }
   function removeVariant(i: number) { setVariants(v => v.filter((_, idx) => idx !== i)) }
   function updateVariant(i: number, field: keyof ProductVariant, value: string | number) {
     setVariants(v => v.map((item, idx) => idx === i ? { ...item, [field]: value } : item))
@@ -138,6 +127,7 @@ export default function ProductForm({ categories, product }: Props) {
     const payload = {
       name: name.trim(),
       slug: isEdit ? product!.slug : toSlug(name),
+      brand: brand.trim(),
       price: parseInt(price) || 0,
       short_description: shortDesc.trim(),
       description: descHtml.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim(),
@@ -285,10 +275,10 @@ export default function ProductForm({ categories, product }: Props) {
           </Card>
 
           {/* Biến thể */}
-          <Card title="Biến thể theo thương hiệu">
+          <Card title="Hãng tương đương" hint="NSK · SKF · FAG · NTN...">
             {variants.length === 0 ? (
               <p className="text-sm text-slate-400 mb-3">
-                Nếu sản phẩm có nhiều thương hiệu (NSK, SKF, FAG...) với giá khác nhau, thêm biến thể tại đây.
+                Thêm giá các hãng quốc tế tương đương (NSK, SKF, FAG...) nếu cửa hàng có kinh doanh.
               </p>
             ) : (
               <div className="mb-3">
@@ -305,13 +295,8 @@ export default function ProductForm({ categories, product }: Props) {
                         <select value={v.thuong_hieu}
                           onChange={e => updateVariant(i, 'thuong_hieu', e.target.value)}
                           className={INPUT + ' bg-white'}>
-                          <option value="">— Chọn —</option>
-                          {BRANDS.map(b => (
-                            <option key={b} value={b}
-                              style={b === 'D&X' ? { fontWeight: 700, color: '#2c2a7c' } : b === 'AGA' ? { fontWeight: 700 } : {}}>
-                              {b === 'D&X' ? '★ D&X (Chính hãng)' : b === 'AGA' ? '◎ AGA (Thay thế)' : b}
-                            </option>
-                          ))}
+                          <option value="">— Chọn hãng —</option>
+                          {BRANDS.map(b => <option key={b} value={b}>{b}</option>)}
                         </select>
                       </div>
                       <div className="flex gap-2 sm:contents items-end">
@@ -340,17 +325,10 @@ export default function ProductForm({ categories, product }: Props) {
                 </div>
               </div>
             )}
-            <div className="flex flex-wrap gap-2">
-              <button type="button" onClick={addDxAga}
-                className="flex items-center gap-1.5 text-sm font-bold px-3 py-2 rounded-lg border-2 transition hover:opacity-90"
-                style={{ borderColor: '#2c2a7c', color: '#2c2a7c', background: '#f0f4ff' }}>
-                ⚡ D&X &amp; AGA
-              </button>
-              <button type="button" onClick={addVariant}
-                className="flex items-center gap-2 text-sm font-semibold px-3 py-2 rounded-lg border border-dashed transition hover:bg-slate-50 border-slate-300 text-slate-600">
-                <Plus size={15}/> Thêm thủ công
-              </button>
-            </div>
+            <button type="button" onClick={addVariant}
+              className="flex items-center gap-2 text-sm font-semibold px-3 py-2 rounded-lg border border-dashed transition hover:bg-slate-50 border-slate-300 text-slate-600">
+              <Plus size={15}/> Thêm hãng tương đương
+            </button>
           </Card>
         </div>
 
@@ -360,7 +338,24 @@ export default function ProductForm({ categories, product }: Props) {
           {/* Ảnh sản phẩm */}
           <Card title="Ảnh sản phẩm">
             <div className="space-y-3">
-              <div className="w-full aspect-square rounded-lg overflow-hidden border border-slate-200 flex items-center justify-center bg-slate-50 relative">
+              <input
+                ref={productImagesInputRef}
+                type="file"
+                accept="image/*"
+                multiple
+                className="hidden"
+                onChange={e => {
+                  const files = e.currentTarget.files
+                  if (files?.length) uploadImages(files)
+                  e.currentTarget.value = ''
+                }}
+              />
+              <button
+                type="button"
+                onClick={() => productImagesInputRef.current?.click()}
+                disabled={uploading}
+                className="w-full aspect-square rounded-lg overflow-hidden border border-slate-200 flex items-center justify-center bg-slate-50 relative transition hover:border-[#2c2a7c] hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-[#2c2a7c]/20 disabled:cursor-wait"
+                aria-label="Chon anh san pham">
                 {images[0] ? (
                   <Image src={images[0]} alt="preview" fill className="object-contain p-3" sizes="280px"/>
                 ) : (
@@ -369,7 +364,7 @@ export default function ProductForm({ categories, product }: Props) {
                     <span className="text-xs">Chưa có ảnh</span>
                   </div>
                 )}
-              </div>
+              </button>
 
               {images.length > 0 && (
                 <div className="grid grid-cols-4 gap-1.5">
@@ -390,17 +385,28 @@ export default function ProductForm({ categories, product }: Props) {
                 </div>
               )}
 
-              <label className="flex items-center justify-center gap-2 w-full py-2 border border-slate-200 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 cursor-pointer transition">
-                <input type="file" accept="image/*" multiple className="hidden"
-                  onChange={e => e.target.files?.length && uploadImages(e.target.files)}/>
+              <button
+                type="button"
+                onClick={() => productImagesInputRef.current?.click()}
+                disabled={uploading}
+                className="flex items-center justify-center gap-2 w-full py-2 border border-slate-200 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 cursor-pointer transition disabled:cursor-wait disabled:opacity-60">
                 {uploading ? 'Đang upload...' : images.length > 0 ? 'Thêm ảnh' : 'Chọn ảnh'}
-              </label>
+              </button>
             </div>
           </Card>
 
           {/* Phân loại & Giá */}
           <Card title="Phân loại & Giá">
             <div className="space-y-3">
+              <div>
+                <label className={LABEL}>Thương hiệu sản phẩm</label>
+                <select value={brand} onChange={e => setBrand(e.target.value)}
+                  className={INPUT + ' bg-white'}>
+                  <option value="">— Chọn thương hiệu —</option>
+                  <option value="D&X">★ D&X Bearings (Chính hãng)</option>
+                  <option value="AGA">◎ AGA</option>
+                </select>
+              </div>
               <div>
                 <label className={LABEL}>Danh mục</label>
                 <select value={categoryId} onChange={e => setCategoryId(e.target.value)}

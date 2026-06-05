@@ -22,10 +22,10 @@ const commitments = [
 ]
 
 const certifications = [
-  { name: 'SKF Authorized', desc: 'Đại lý chính thức SKF' },
-  { name: 'NSK Authorized', desc: 'Đại lý chính thức NSK' },
-  { name: 'ISO 9001:2015',  desc: 'Hệ thống quản lý chất lượng' },
-  { name: 'FAG / Schaeffler', desc: 'Nhà phân phối được ủy quyền' },
+  { name: 'D&X Bearings',   desc: 'Thương hiệu chủ đạo' },
+  { name: 'AGA',            desc: 'Thương hiệu thay thế' },
+  { name: 'Chính hãng',     desc: 'Nguồn gốc rõ ràng, tem nhãn đầy đủ' },
+  { name: 'Bảo hành',       desc: 'Đổi trả theo chính sách nhà sản xuất' },
 ]
 
 export default async function AboutPage() {
@@ -59,28 +59,27 @@ export default async function AboutPage() {
           <div>
             <p className="text-xs font-bold uppercase tracking-widest mb-2" style={{ color: '#2c2a7c' }}>Câu chuyện của chúng tôi</p>
             <h2 className="text-2xl md:text-3xl font-extrabold mb-4" style={{ color: '#303030' }}>
-              Hơn 10 năm trong ngành vòng bi công nghiệp
+              {settings.company_name || settings.shop_name}
             </h2>
             <div className="flex flex-col gap-3 text-sm text-slate-600 leading-relaxed">
-              <p>
-                D&X Bearings được thành lập với sứ mệnh cung cấp vòng bi công nghiệp chính hãng, chất lượng cao đến tay khách hàng với giá cạnh tranh nhất thị trường.
-              </p>
-              <p>
-                Trải qua hơn một thập kỷ hoạt động, chúng tôi đã xây dựng được mạng lưới phân phối rộng khắp, phục vụ hơn 1.000 doanh nghiệp và cá nhân trên toàn quốc — từ các nhà máy sản xuất lớn đến các xưởng cơ khí nhỏ.
-              </p>
-              <p>
-                Với đội ngũ kỹ thuật viên có chuyên môn sâu về cơ khí, chúng tôi không chỉ bán hàng mà còn tư vấn giải pháp tối ưu cho từng ứng dụng cụ thể.
-              </p>
+              {settings.company_description
+                ? settings.company_description.split('\n').filter(Boolean).map((line, i) => (
+                    <p key={i}>{line}</p>
+                  ))
+                : (
+                  <p>{settings.slogan}</p>
+                )
+              }
             </div>
           </div>
 
-          {/* Stats */}
+          {/* Stats — lấy từ settings hoặc để trống nếu chưa có */}
           <div className="grid grid-cols-2 gap-3">
             {[
-              { num: '10+',   label: 'Năm kinh nghiệm',      color: '#2c2a7c' },
-              { num: '500+',  label: 'Loại vòng bi',          color: '#c51c23' },
-              { num: '1000+', label: 'Khách hàng tin dùng',   color: '#2c2a7c' },
-              { num: '24h',   label: 'Giao hàng nội thành',   color: '#c51c23' },
+              { num: '10+',     label: 'Thương hiệu',         color: '#2c2a7c' },
+              { num: '1000+', label: 'Loại vòng bi',         color: '#c51c23' },
+              { num: '3+',     label: 'Nhân viên tư vấn',     color: '#2c2a7c' },
+              { num: '24h',   label: 'Hỗ trợ & tư vấn',     color: '#c51c23' },
             ].map(({ num, label, color }) => (
               <div key={label} className="stat-tile rounded-xl p-5 text-center">
                 <div className="text-3xl font-black mb-1" style={{ color }}>{num}</div>

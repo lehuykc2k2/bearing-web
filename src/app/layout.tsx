@@ -12,8 +12,9 @@ export const metadata: Metadata = {
   title: 'Vòng Bi',
   description: 'Chuyên cung cấp vòng bi chính hãng',
   icons: {
-    icon: '/favicon.svg',
-    shortcut: '/favicon.svg',
+    icon: [{ url: '/logo-blue-cropped.png', type: 'image/png' }],
+    shortcut: '/logo-blue-cropped.png',
+    apple: '/logo-blue-cropped.png',
   },
 }
 

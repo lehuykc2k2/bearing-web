@@ -1,5 +1,6 @@
+import { cache } from 'react'
 import { createServerSupabase } from './supabase-server'
-import type { Settings } from '@/types'
+import type { Settings, SalesContact } from '@/types'
 
 const emptySettings: Settings = {
   shop_name: '',
@@ -17,6 +18,22 @@ const emptySettings: Settings = {
   banner_title: '',
   banner_sub: '',
 }
+
+export const getSalesContacts = cache(async function getSalesContacts(): Promise<SalesContact[]> {
+  try {
+    const supabase = await createServerSupabase()
+    const { data, error } = await supabase
+      .from('sales_contacts')
+      .select('*')
+      .eq('is_active', true)
+      .neq('phone', '')
+      .order('sort_order')
+    if (error || !data) return []
+    return data as SalesContact[]
+  } catch {
+    return []
+  }
+})
 
 export async function getSettings(): Promise<Settings> {
   try {

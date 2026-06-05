@@ -33,24 +33,31 @@ const SORT_OPTIONS = [
   { value: 'price_desc', label: 'Giá cao → thấp' },
 ]
 
+const BRAND_TABS = [
+  { value: '',    label: 'Tất cả' },
+  { value: 'D&X', label: 'D&X Bearings' },
+  { value: 'AGA', label: 'AGA' },
+]
+
 export default async function ProductsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ category?: string; q?: string; sort?: string }>
+  searchParams: Promise<{ category?: string; q?: string; sort?: string; brand?: string }>
 }) {
   const [params, t] = await Promise.all([searchParams, getTranslations('products')])
   const categories = await getCategories()
   const products = await getProducts({
     categorySlug: params.category,
-    q:    params.q,
-    sort: params.sort,
+    q:     params.q,
+    sort:  params.sort,
+    brand: params.brand,
     categories,
   })
 
   const currentCat = categories.find(c => c.slug === params.category)
   const count = products.length
-  const baseParams = { q: params.q, sort: params.sort }
-  const hasFilter = !!(params.category || params.q)
+  const baseParams = { q: params.q, sort: params.sort, brand: params.brand }
+  const hasFilter = !!(params.category || params.q || params.brand)
 
   return (
     <div className="public-page-bg min-h-screen">
@@ -89,6 +96,7 @@ export default async function ProductsPage({
           {/* Search row */}
           <form className="border-b border-slate-100">
             {params.category && <input type="hidden" name="category" value={params.category}/>}
+            {params.brand    && <input type="hidden" name="brand"    value={params.brand}/>}
             <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_auto] md:items-stretch">
               <div className="flex min-w-0 items-center px-4 py-3.5 gap-3">
                 <Search size={17} className="shrink-0 text-slate-400"/>
@@ -118,6 +126,19 @@ export default async function ProductsPage({
               </button>
             </div>
           </form>
+
+          {/* Brand tabs */}
+          <div className="flex gap-1.5 px-3 pt-3 pb-0 md:px-4 overflow-x-auto scrollbar-none border-b border-slate-100">
+            {BRAND_TABS.map(tab => (
+              <a key={tab.value} href={buildUrl({ q: params.q, sort: params.sort, category: params.category }, { brand: tab.value || undefined })}
+                className="focus-ring shrink-0 px-4 py-2 text-xs font-bold transition whitespace-nowrap border-b-2 -mb-px"
+                style={(params.brand ?? '') === tab.value
+                  ? { borderColor: tab.value === 'AGA' ? '#ea580c' : '#2c2a7c', color: tab.value === 'AGA' ? '#ea580c' : '#2c2a7c', background: 'transparent' }
+                  : { borderColor: 'transparent', color: '#94a3b8', background: 'transparent' }}>
+                {tab.label}
+              </a>
+            ))}
+          </div>
 
           {/* Category pills */}
           <div className="flex gap-1.5 px-3 py-3 md:px-4 overflow-x-auto scrollbar-none">

@@ -1,5 +1,6 @@
 'use client'
 import { useMemo, useState } from 'react'
+import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
 import {
   AlertCircle,
@@ -9,6 +10,8 @@ import {
   Phone,
   Save,
   Share2,
+  Users,
+  ArrowRight,
   type LucideIcon,
 } from 'lucide-react'
 
@@ -16,6 +19,7 @@ type SettingField = {
   key: string
   label: string
   placeholder: string
+  hint?: string
   span?: 1 | 2
   multiline?: boolean
 }
@@ -24,6 +28,7 @@ type SettingSection = {
   title: string
   icon: LucideIcon
   fields: SettingField[]
+  note?: React.ReactNode
 }
 
 const SECTIONS: SettingSection[] = [
@@ -31,10 +36,10 @@ const SECTIONS: SettingSection[] = [
     title: 'Thông tin công ty',
     icon: Building2,
     fields: [
-      { key: 'shop_name', label: 'Tên thương hiệu', placeholder: 'VD: D&X Bearings' },
-      { key: 'company_name', label: 'Tên công ty', placeholder: 'VD: CÔNG TY TNHH THƯƠNG MẠI & KỸ THUẬT HD VIETNAM' },
-      { key: 'slogan', label: 'Slogan', placeholder: 'More Stable - More Efficient', span: 2 },
-      { key: 'company_description', label: 'Mô tả công ty', placeholder: 'Chuyên kinh doanh và phân phối các thiết bị công nghiệp...', span: 2, multiline: true },
+      { key: 'shop_name',           label: 'Tên thương hiệu', placeholder: 'VD: D&X Bearings' },
+      { key: 'company_name',        label: 'Tên công ty',     placeholder: 'VD: CÔNG TY TNHH THƯƠNG MẠI & KỸ THUẬT HD VIETNAM' },
+      { key: 'slogan',              label: 'Slogan',          placeholder: 'More Stable - More Efficient', span: 2 },
+      { key: 'company_description', label: 'Mô tả công ty',  placeholder: 'Chuyên kinh doanh và phân phối các thiết bị công nghiệp...', span: 2, multiline: true },
     ],
   },
   {
@@ -42,26 +47,40 @@ const SECTIONS: SettingSection[] = [
     icon: ImageIcon,
     fields: [
       { key: 'banner_title', label: 'Tiêu đề lớn', placeholder: 'D&X Rolling Bearings' },
-      { key: 'banner_sub', label: 'Phụ đề', placeholder: 'Chuyên cung cấp vòng bi chính hãng...', multiline: true },
+      { key: 'banner_sub',   label: 'Phụ đề',      placeholder: 'Chuyên cung cấp vòng bi chính hãng...', multiline: true },
     ],
   },
   {
-    title: 'Liên hệ',
+    title: 'Liên hệ công ty',
     icon: Phone,
+    note: (
+      <div className="md:col-span-2 flex items-center justify-between gap-3 px-3.5 py-2.5 rounded-lg border text-sm"
+        style={{ background: '#f0f9ff', borderColor: '#bae6fd' }}>
+        <div className="flex items-center gap-2" style={{ color: '#0369a1' }}>
+          <Users size={14}/>
+          <span className="font-medium">Số điện thoại từng nhân viên kinh doanh quản lý riêng tại</span>
+        </div>
+        <Link href="/admin/contacts"
+          className="flex items-center gap-1 font-bold whitespace-nowrap hover:underline"
+          style={{ color: '#0369a1' }}>
+          Nhân viên KD <ArrowRight size={12}/>
+        </Link>
+      </div>
+    ),
     fields: [
-      { key: 'tax_code', label: 'Mã số thuế', placeholder: '0319139983' },
-      { key: 'phone', label: 'Số điện thoại', placeholder: '0909 000 000' },
-      { key: 'email', label: 'Email', placeholder: 'contact@domain.vn' },
-      { key: 'zalo', label: 'Zalo', placeholder: '0909000000' },
-      { key: 'business_hours', label: 'Giờ làm việc', placeholder: '8h-17h Thứ 2 - Thứ 7' },
-      { key: 'address', label: 'Địa chỉ', placeholder: '123 Đường ABC, Quận 1, TP.HCM', multiline: true },
+      { key: 'tax_code',       label: 'Mã số thuế',                     placeholder: '0319139983' },
+      { key: 'phone',          label: 'Hotline công ty',                 placeholder: '0909 000 000', hint: 'Hiển thị trên trang chủ, liên hệ, sản phẩm' },
+      { key: 'email',          label: 'Email',                           placeholder: 'contact@domain.vn' },
+      { key: 'zalo',           label: 'Zalo công ty',                    placeholder: '0909000000',   hint: 'Số Zalo dùng cho nút Zalo chung trên website' },
+      { key: 'business_hours', label: 'Giờ làm việc',                   placeholder: '8h-17h Thứ 2 - Thứ 7' },
+      { key: 'address',        label: 'Địa chỉ',                        placeholder: '123 Đường ABC, Quận 1, TP.HCM', span: 2, multiline: true },
     ],
   },
   {
     title: 'Mạng xã hội',
     icon: Share2,
     fields: [
-      { key: 'facebook', label: 'Facebook', placeholder: 'https://facebook.com/...' },
+      { key: 'facebook',  label: 'Facebook',  placeholder: 'https://facebook.com/...' },
       { key: 'messenger', label: 'Messenger', placeholder: 'https://m.me/ten-trang' },
     ],
   },
@@ -138,7 +157,7 @@ export default function SettingsForm({ initialValues }: { initialValues: Record<
         </div>
 
         <div className="divide-y divide-slate-100">
-          {SECTIONS.map(({ title, icon: Icon, fields }) => (
+          {SECTIONS.map(({ title, icon: Icon, fields, note }) => (
             <section key={title} className="p-5 grid grid-cols-1 lg:grid-cols-[190px_minmax(0,1fr)] gap-4 lg:gap-6">
               <div className="flex items-center gap-3 lg:items-start">
                 <span className="w-9 h-9 rounded-lg flex items-center justify-center bg-sky-50 border border-sky-100 shrink-0">
@@ -148,7 +167,8 @@ export default function SettingsForm({ initialValues }: { initialValues: Record<
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {fields.map(({ key, label, placeholder, span, multiline }) => (
+                {note && <div className="md:col-span-2">{note}</div>}
+                {fields.map(({ key, label, placeholder, span, multiline, hint }) => (
                   <div key={key} className={span === 2 ? 'md:col-span-2' : ''}>
                     <label className="block text-[11px] font-bold mb-1.5 text-slate-500 uppercase tracking-wide">
                       {label}
@@ -169,6 +189,7 @@ export default function SettingsForm({ initialValues }: { initialValues: Record<
                         className={INPUT}
                       />
                     )}
+                    {hint && <p className="text-[10px] text-slate-400 mt-1">{hint}</p>}
                   </div>
                 ))}
               </div>

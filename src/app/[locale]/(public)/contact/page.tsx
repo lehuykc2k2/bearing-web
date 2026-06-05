@@ -24,47 +24,12 @@ export default async function ContactPage({
   const productName = params.name ? decodeURIComponent(params.name) : undefined
 
   const infoItems = [
-    settings.tax_code && {
-      icon: FileText,
-      label: 'Mã số thuế',
-      value: settings.tax_code,
-      color: '#64748b',
-    },
-    settings.phone && {
-      icon: Phone,
-      label: 'Hotline',
-      value: settings.phone,
-      href: `tel:${settings.phone.replace(/\s/g, '')}`,
-      color: '#2c2a7c',
-    },
-    settings.email && {
-      icon: Mail,
-      label: 'Email',
-      value: settings.email,
-      href: `mailto:${settings.email}`,
-      color: '#2c2a7c',
-    },
-    settings.zalo && {
-      icon: MessageCircle,
-      label: 'Zalo',
-      value: `zalo.me/${settings.zalo}`,
-      href: `https://zalo.me/${settings.zalo}`,
-      color: '#0068FF',
-    },
-    settings.address && {
-      icon: MapPin,
-      label: 'Địa chỉ',
-      value: settings.address,
-      href: `https://maps.google.com/?q=${encodeURIComponent(settings.address)}`,
-      color: '#c51c23',
-    },
-    settings.facebook && {
-      icon: ExternalLink,
-      label: 'Facebook',
-      value: 'Facebook Page',
-      href: settings.facebook,
-      color: '#1877F2',
-    },
+    settings.tax_code && { icon: FileText,     label: 'Mã số thuế', value: settings.tax_code,                                                                                 color: '#64748b' },
+    settings.phone    && { icon: Phone,         label: 'Hotline',    value: settings.phone,       href: `tel:${settings.phone.replace(/\s/g, '')}`,                            color: '#2c2a7c' },
+    settings.email    && { icon: Mail,          label: 'Email',      value: settings.email,       href: `mailto:${settings.email}`,                                            color: '#2c2a7c' },
+    settings.zalo     && { icon: MessageCircle, label: 'Zalo',       value: `zalo.me/${settings.zalo}`, href: `https://zalo.me/${settings.zalo}`,                              color: '#0068FF' },
+    settings.address  && { icon: MapPin,        label: 'Địa chỉ',   value: settings.address,     href: `https://maps.google.com/?q=${encodeURIComponent(settings.address)}`,  color: '#c51c23' },
+    settings.facebook && { icon: ExternalLink,  label: 'Facebook',   value: 'Facebook Page',      href: settings.facebook,                                                     color: '#1877F2' },
   ].filter(Boolean) as { icon: React.ElementType; label: string; value: string; href?: string; color: string }[]
 
   return (
@@ -73,7 +38,7 @@ export default async function ContactPage({
       <div className="hero-shell relative overflow-hidden">
         <Image
           src="/hero-bearings-showroom.png"
-          alt="Liên hệ D&X Bearings"
+          alt={`Liên hệ ${settings.shop_name}`}
           fill priority sizes="100vw"
           className="hero-media object-cover object-center"
         />

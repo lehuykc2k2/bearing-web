@@ -32,6 +32,16 @@ export default function ProductCard({ product }: { product: Product }) {
             {product.category.name}
           </span>
         )}
+        {product.brand && (
+          <span className="absolute top-1.5 right-1.5 text-[9px] font-extrabold px-1.5 py-0.5 rounded-md leading-tight"
+            style={product.brand === 'D&X'
+              ? { background: '#2c2a7c', color: 'white' }
+              : product.brand === 'AGA'
+              ? { background: '#ea580c', color: 'white' }
+              : { background: '#f1f5f9', color: '#475569' }}>
+            {product.brand}
+          </span>
+        )}
       </div>
 
       {/* Nội dung */}
