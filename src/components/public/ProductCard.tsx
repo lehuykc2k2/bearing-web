@@ -1,7 +1,8 @@
-import Link from 'next/link'
 import Image from 'next/image'
 import { Phone } from 'lucide-react'
+import { Link } from '@/i18n/navigation'
 import BearingPlaceholder from './BearingPlaceholder'
+import { getBrandTheme } from '@/lib/brand-theme'
 import type { Product } from '@/types'
 
 function formatPrice(price: number) {
@@ -9,6 +10,8 @@ function formatPrice(price: number) {
 }
 
 export default function ProductCard({ product }: { product: Product }) {
+  const brandTheme = getBrandTheme(product.brand)
+
   return (
     <Link href={`/products/${product.id}`}
       className="product-card focus-ring group rounded-lg overflow-hidden flex flex-col active:scale-[0.98]">
@@ -32,20 +35,32 @@ export default function ProductCard({ product }: { product: Product }) {
             {product.category.name}
           </span>
         )}
-        {product.brand && (
-          <span className="absolute top-1.5 right-1.5 text-[9px] font-extrabold px-1.5 py-0.5 rounded-md leading-tight"
-            style={product.brand === 'D&X'
-              ? { background: '#2c2a7c', color: 'white' }
-              : product.brand === 'AGA'
-              ? { background: '#ea580c', color: 'white' }
-              : { background: '#f1f5f9', color: '#475569' }}>
-            {product.brand}
-          </span>
+        {brandTheme && (
+          <div className="absolute inset-x-2 bottom-2 flex justify-end">
+            <span className="inline-flex max-w-full items-center gap-1.5 rounded-lg px-2.5 py-1.5 shadow-lg ring-1 ring-white/70"
+              style={{ background: brandTheme.gradient, color: brandTheme.text }}>
+              <span className="grid h-5 min-w-5 place-items-center rounded-md bg-white/20 px-1 text-[9px] font-black leading-none">
+                {brandTheme.shortLabel}
+              </span>
+              <span className="truncate text-[11px] font-black uppercase tracking-wide">
+                {brandTheme.label}
+              </span>
+            </span>
+          </div>
         )}
       </div>
 
       {/* Nội dung */}
       <div className="p-2.5 sm:p-4 flex flex-col flex-1">
+        {brandTheme && (
+          <div className="mb-2 flex items-center gap-1.5">
+            <span className="h-2 w-2 rounded-full" style={{ background: brandTheme.bg }} />
+            <span className="truncate text-[10px] sm:text-[11px] font-black uppercase tracking-[0.14em]"
+              style={{ color: brandTheme.bg }}>
+              {brandTheme.label}
+            </span>
+          </div>
+        )}
         <h3 className="font-bold text-[11px] sm:text-sm line-clamp-2 leading-snug mb-1 group-hover:text-[#2c2a7c] transition-colors"
           style={{ color: '#303030' }}>
           {product.name}

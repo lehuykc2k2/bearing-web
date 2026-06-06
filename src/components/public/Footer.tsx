@@ -10,6 +10,11 @@ export default async function Footer({ settings, contacts = [] }: { settings: Se
   const tn = await getTranslations('nav')
   const companyName = settings.company_name || settings.shop_name
   const companyDescription = settings.company_description || settings.slogan
+  const footerContacts = contacts.length > 0
+    ? contacts
+    : settings.phone
+      ? [{ id: '0', name: settings.phone, phone: settings.phone, zalo: settings.zalo, role: '', sort_order: 0, is_active: true }]
+      : []
   const companyInfo = [
     settings.tax_code && { icon: FileText, value: `MST: ${settings.tax_code}` },
     settings.address && { icon: MapPin, value: settings.address },
@@ -35,19 +40,20 @@ export default async function Footer({ settings, contacts = [] }: { settings: Se
             <p className="text-white font-bold text-lg">{t('ctaTitle')}</p>
             <p className="text-white/80 text-sm">{t('ctaSub')}</p>
           </div>
-          <div className="flex flex-wrap justify-center sm:justify-end gap-2">
-            {(contacts.length > 0 ? contacts : settings.phone ? [{ id: '0', name: settings.phone, phone: settings.phone, zalo: settings.zalo, role: '', sort_order: 0, is_active: true }] : []).map(c => (
+          <div className="grid w-full grid-cols-1 gap-2 sm:flex sm:w-auto sm:flex-wrap sm:justify-end">
+            {footerContacts.map(c => (
               <a key={c.id}
                 href={`tel:${c.phone.replace(/\s/g, '')}`}
-                className="focus-ring interactive-lift font-bold px-4 py-2.5 rounded-lg text-sm flex items-center gap-2 text-white"
+                className="focus-ring interactive-lift flex min-h-11 items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-bold text-white sm:w-auto"
                 style={{ background: 'rgba(255,255,255,0.16)' }}>
-                <Phone size={14}/> {c.name || c.phone}
+                <Phone size={14}/>
+                <span className="truncate">{c.phone}</span>
               </a>
             ))}
             {(contacts[0]?.zalo || settings.zalo) && (
               <a href={`https://zalo.me/${contacts[0]?.zalo || settings.zalo}`}
                 target="_blank" rel="noopener noreferrer"
-                className="focus-ring border-2 border-white text-white font-bold px-4 py-2.5 rounded-lg text-sm flex items-center gap-2 hover:bg-white/10 transition">
+                className="focus-ring flex min-h-11 items-center justify-center gap-2 rounded-lg border-2 border-white px-4 py-2.5 text-sm font-bold text-white transition hover:bg-white/10 sm:w-auto">
                 <MessageCircle size={14}/> {t('zaloNow')}
               </a>
             )}

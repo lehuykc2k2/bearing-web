@@ -1,16 +1,18 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { Phone, MessageCircle, ChevronRight, Tag, FileText, Share2, ShieldCheck, Truck, Headphones, CheckCircle2 } from 'lucide-react'
+import { ChevronRight, Tag, FileText, Share2, ShieldCheck, Truck, Headphones, CheckCircle2 } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import { getSettings, getSalesContacts } from '@/lib/settings'
 import { getProductById, getProducts, getCategories } from '@/lib/data'
 import ProductCard from '@/components/public/ProductCard'
 import StickyCTA from '@/components/public/StickyCTA'
+import ProductContactActions from '@/components/public/ProductContactActions'
 import ProductImageGallery from '@/components/public/ProductImageGallery'
 import ProductSpecSheet from '@/components/public/ProductSpecSheet'
 import RichContentViewer from '@/components/public/RichContentViewer'
-import type { Product } from '@/types'
+import { getBrandTheme } from '@/lib/brand-theme'
+import type { Product, SalesContact } from '@/types'
 
 export async function generateMetadata({
   params,
@@ -40,12 +42,6 @@ function formatPrice(price: number, locale: string) {
   return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price)
 }
 
-const BRAND_COLOR: Record<string, { bg: string; text: string; light: string; border: string }> = {
-  'D&X': { bg: '#2c2a7c', text: 'white', light: '#f0f4ff', border: '#2c2a7c' },
-  'AGA': { bg: '#ea580c', text: 'white', light: '#fff7ed', border: '#ea580c' },
-}
-const DEFAULT_BRAND_COLOR = { bg: '#475569', text: 'white', light: '#f8fafc', border: '#cbd5e1' }
-
 export default async function ProductDetailPage({
   params,
 }: {
@@ -71,8 +67,23 @@ export default async function ProductDetailPage({
 
   const BASE = 'https://bearing-web.vercel.app'
   const productUrl = `${BASE}/${locale}/products/${p.id}`
-  const brandColor = p.brand ? (BRAND_COLOR[p.brand] ?? DEFAULT_BRAND_COLOR) : null
-
+  const brandColor = getBrandTheme(p.brand)
+  const primaryPhone = contacts[0]?.phone || settings.phone
+  const primaryZalo = contacts[0]?.zalo || settings.zalo
+  const mobileContacts: SalesContact[] = contacts.length > 0
+    ? contacts
+    : primaryPhone
+      ? [{
+          id: 'company-contact',
+          name: settings.shop_name || 'Tư vấn',
+          phone: primaryPhone,
+          zalo: primaryZalo,
+          role: 'Kinh doanh & Tư vấn',
+          sort_order: 0,
+          is_active: true,
+          created_at: '',
+        }]
+      : []
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Product',
@@ -131,28 +142,38 @@ export default async function ProductDetailPage({
           </div>
 
           {/* Info panel */}
-          <div className="flex flex-col gap-0 rounded-2xl overflow-hidden border" style={{ borderColor: brandColor?.border ?? '#e5e8ea' }}>
+          <div className="flex flex-col gap-0 overflow-hidden rounded-2xl border" style={{ borderColor: brandColor?.border ?? '#e5e8ea' }}>
 
             {/* Brand strip */}
             {brandColor && (
-              <div className="px-5 py-3 flex items-center justify-between"
-                style={{ background: brandColor.bg }}>
-                <div className="flex items-center gap-2">
-                  <span className="font-extrabold text-base tracking-wide" style={{ color: brandColor.text }}>
-                    {p.brand}
-                  </span>
-                  <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full"
-                    style={{ background: 'rgba(255,255,255,0.2)', color: brandColor.text }}>
-                    Chính hãng
-                  </span>
+              <div className="rounded-t-2xl px-5 py-4"
+                style={{ background: brandColor.gradient, color: brandColor.text }}>
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div className="flex min-w-0 items-center gap-3">
+                    <span className="grid h-11 min-w-11 place-items-center rounded-xl bg-white/20 px-2 text-sm font-black leading-none ring-1 ring-white/30">
+                      {brandColor.shortLabel}
+                    </span>
+                    <div className="min-w-0">
+                      <p className="text-[10px] font-black uppercase tracking-[0.22em] opacity-80">
+                        Thương hiệu
+                      </p>
+                      <p className="truncate text-xl font-black leading-tight">
+                        {brandColor.label}
+                      </p>
+                    </div>
+                    <span className="hidden sm:inline-flex rounded-full px-2.5 py-1 text-[10px] font-bold"
+                      style={{ background: 'rgba(255,255,255,0.2)', color: brandColor.text }}>
+                      Chính hãng
+                    </span>
+                  </div>
+                  {p.category && (
+                    <Link href={`/products?category=${p.category.slug}&brand=${encodeURIComponent(brandColor.key)}`}
+                      className="flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold transition hover:bg-white/15"
+                      style={{ color: brandColor.text }}>
+                      <Tag size={10}/> {p.category.name}
+                    </Link>
+                  )}
                 </div>
-                {p.category && (
-                  <Link href={`/products?category=${p.category.slug}&brand=${encodeURIComponent(p.brand)}`}
-                    className="flex items-center gap-1 text-[11px] font-semibold opacity-80 hover:opacity-100 transition"
-                    style={{ color: brandColor.text }}>
-                    <Tag size={10}/> {p.category.name}
-                  </Link>
-                )}
               </div>
             )}
 
@@ -231,24 +252,9 @@ export default async function ProductDetailPage({
                 </span>
               </div>
 
-              {/* Nút CTA — chỉ hiện trên desktop */}
+              {/* Nút CTA - chỉ hiện trên desktop */}
               <div className="hidden md:flex flex-col gap-2">
-                <div className="flex gap-2">
-                  {settings.phone && (
-                    <a href={`tel:${settings.phone.replace(/\s/g, '')}`}
-                      className="focus-ring interactive-lift flex-1 flex items-center justify-center gap-2 text-white font-bold py-3 rounded-xl transition text-sm shadow-sm"
-                      style={{ background: brandColor?.bg ?? 'linear-gradient(135deg,#2c2a7c,#0c3263)' }}>
-                      <Phone size={14}/> Gọi ngay
-                    </a>
-                  )}
-                  {settings.zalo && (
-                    <a href={`https://zalo.me/${settings.zalo}`} target="_blank" rel="noopener noreferrer"
-                      className="focus-ring interactive-lift flex-1 flex items-center justify-center gap-2 text-white font-bold py-3 rounded-xl transition text-sm shadow-sm"
-                      style={{ background: '#0068ff' }}>
-                      <MessageCircle size={14}/> Zalo
-                    </a>
-                  )}
-                </div>
+                <ProductContactActions contacts={mobileContacts} color={brandColor?.bg ?? '#2c2a7c'} />
                 <div className="flex gap-2">
                   <Link href={`/contact?product=${p.id}&name=${encodeURIComponent(p.name)}`}
                     className="focus-ring interactive-lift flex-1 flex items-center justify-center gap-2 font-bold py-3 rounded-xl transition text-sm border-2"
@@ -287,15 +293,28 @@ export default async function ProductDetailPage({
                 </div>
                 <table className="w-full text-sm">
                   <tbody>
-                    {p.variants.map((v, i) => (
-                      <tr key={i} className="border-t" style={{ borderColor: '#f1f5f9' }}>
-                        <td className="px-5 py-2.5 font-bold" style={{ color: '#303030' }}>{v.thuong_hieu}</td>
-                        <td className="px-5 py-2.5 font-extrabold" style={{ color: '#2c2a7c' }}>
-                          {v.gia > 0 ? formatPrice(v.gia, locale) : <span className="text-sm font-semibold italic" style={{ color: '#c51c23' }}>Liên hệ</span>}
-                        </td>
-                        <td className="px-5 py-2.5 text-xs text-right" style={{ color: '#94a3b8' }}>{v.ton_kho || '—'}</td>
-                      </tr>
-                    ))}
+                    {p.variants.map((v, i) => {
+                      const variantTheme = getBrandTheme(v.thuong_hieu)
+                      return (
+                        <tr key={i} className="border-t" style={{ borderColor: '#f1f5f9' }}>
+                          <td className="px-5 py-2.5 align-middle">
+                            {variantTheme ? (
+                              <span className="inline-flex max-w-full items-center gap-2 rounded-lg border px-2.5 py-1 text-xs font-black"
+                                style={{ background: variantTheme.light, borderColor: variantTheme.border, color: variantTheme.bg }}>
+                                <span className="h-2 w-2 rounded-full" style={{ background: variantTheme.bg }} />
+                                <span className="truncate">{variantTheme.label}</span>
+                              </span>
+                            ) : (
+                              <span className="font-bold" style={{ color: '#303030' }}>{v.thuong_hieu}</span>
+                            )}
+                          </td>
+                          <td className="px-5 py-2.5 font-extrabold align-middle" style={{ color: variantTheme?.bg ?? '#2c2a7c' }}>
+                            {v.gia > 0 ? formatPrice(v.gia, locale) : <span className="text-sm font-semibold italic" style={{ color: '#c51c23' }}>Liên hệ</span>}
+                          </td>
+                          <td className="px-5 py-2.5 text-xs text-right align-middle" style={{ color: '#94a3b8' }}>{v.ton_kho || '—'}</td>
+                        </tr>
+                      )
+                    })}
                   </tbody>
                 </table>
               </div>
@@ -355,7 +374,7 @@ export default async function ProductDetailPage({
         </div>
       </div>
 
-      <StickyCTA contacts={contacts} />
+      <StickyCTA contacts={mobileContacts} />
     </div>
   )
 }

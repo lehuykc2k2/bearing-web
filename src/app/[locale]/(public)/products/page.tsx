@@ -5,6 +5,7 @@ import { getCategories, getProducts } from '@/lib/data'
 import { getSettings } from '@/lib/settings'
 import ProductCard from '@/components/public/ProductCard'
 import { Search, SlidersHorizontal } from 'lucide-react'
+import { BRAND_THEMES } from '@/lib/brand-theme'
 import type { Product } from '@/types'
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -34,9 +35,19 @@ const SORT_OPTIONS = [
 ]
 
 const BRAND_TABS = [
-  { value: '',    label: 'Tất cả' },
-  { value: 'D&X', label: 'D&X Bearings' },
-  { value: 'AGA', label: 'AGA' },
+  {
+    value: '',
+    label: 'Tất cả',
+    subLabel: 'Mọi thương hiệu',
+    shortLabel: 'All',
+    bg: '#2c2a7c',
+    text: 'white',
+    light: '#f8fafc',
+    border: '#cbd5e1',
+    gradient: 'linear-gradient(135deg,#2c2a7c 0%,#0c3263 100%)',
+  },
+  { value: 'D&X', subLabel: 'D&X Bearings', ...BRAND_THEMES['D&X'] },
+  { value: 'AGA', subLabel: 'Thương hiệu AGA', ...BRAND_THEMES.AGA },
 ]
 
 export default async function ProductsPage({
@@ -128,16 +139,44 @@ export default async function ProductsPage({
           </form>
 
           {/* Brand tabs */}
-          <div className="flex gap-1.5 px-3 pt-3 pb-0 md:px-4 overflow-x-auto scrollbar-none border-b border-slate-100">
-            {BRAND_TABS.map(tab => (
-              <a key={tab.value} href={buildUrl({ q: params.q, sort: params.sort, category: params.category }, { brand: tab.value || undefined })}
-                className="focus-ring shrink-0 px-4 py-2 text-xs font-bold transition whitespace-nowrap border-b-2 -mb-px"
-                style={(params.brand ?? '') === tab.value
-                  ? { borderColor: tab.value === 'AGA' ? '#ea580c' : '#2c2a7c', color: tab.value === 'AGA' ? '#ea580c' : '#2c2a7c', background: 'transparent' }
-                  : { borderColor: 'transparent', color: '#94a3b8', background: 'transparent' }}>
-                {tab.label}
-              </a>
-            ))}
+          <div className="px-3 py-3 md:px-4 border-b border-slate-100">
+            <div className="mb-2 flex items-center justify-between gap-3">
+              <p className="text-[10px] font-black uppercase tracking-[0.18em]" style={{ color: '#64748b' }}>
+                Thương hiệu
+              </p>
+              {params.brand && (
+                <a href={buildUrl({ q: params.q, sort: params.sort, category: params.category }, { brand: undefined })}
+                  className="focus-ring rounded text-[11px] font-semibold hover:underline"
+                  style={{ color: '#64748b' }}>
+                  Xóa lọc
+                </a>
+              )}
+            </div>
+            <div className="flex gap-2 overflow-x-auto scrollbar-none">
+              {BRAND_TABS.map(tab => {
+                const active = (params.brand ?? '') === tab.value
+                return (
+                  <a key={tab.value} href={buildUrl({ q: params.q, sort: params.sort, category: params.category }, { brand: tab.value || undefined })}
+                    className="focus-ring group shrink-0 min-w-[8.75rem] rounded-xl border px-3 py-2.5 transition hover:-translate-y-0.5 hover:shadow-md"
+                    style={active
+                      ? { borderColor: tab.border, background: tab.gradient, color: tab.text, boxShadow: `0 12px 26px ${tab.bg}24` }
+                      : { borderColor: '#e2e8f0', background: tab.light, color: tab.bg }}>
+                    <span className="flex items-center gap-2">
+                      <span className="grid h-8 min-w-8 place-items-center rounded-lg px-2 text-[11px] font-black"
+                        style={active
+                          ? { background: 'rgba(255,255,255,0.18)', color: tab.text }
+                          : { background: tab.gradient, color: tab.text }}>
+                        {tab.shortLabel}
+                      </span>
+                      <span className="min-w-0">
+                        <span className="block truncate text-sm font-black leading-tight">{tab.label}</span>
+                        <span className="block truncate text-[10px] font-semibold leading-tight opacity-75">{tab.subLabel}</span>
+                      </span>
+                    </span>
+                  </a>
+                )
+              })}
+            </div>
           </div>
 
           {/* Category pills */}

@@ -1,8 +1,10 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
-import { getSettings } from '@/lib/settings'
+import type { ElementType } from 'react'
+import { getSalesContacts, getSettings } from '@/lib/settings'
 import { Phone, MapPin, Clock, MessageCircle, ExternalLink, Mail, FileText } from 'lucide-react'
 import QuoteForm from '@/components/public/QuoteForm'
+import SalesContactCards from '@/components/public/SalesContactCards'
 
 export async function generateMetadata(): Promise<Metadata> {
   const s = await getSettings()
@@ -19,7 +21,7 @@ export default async function ContactPage({
 }: {
   searchParams: Promise<{ product?: string; name?: string }>
 }) {
-  const [settings, params] = await Promise.all([getSettings(), searchParams])
+  const [settings, contacts, params] = await Promise.all([getSettings(), getSalesContacts(), searchParams])
   const productId   = params.product
   const productName = params.name ? decodeURIComponent(params.name) : undefined
 
@@ -30,7 +32,7 @@ export default async function ContactPage({
     settings.zalo     && { icon: MessageCircle, label: 'Zalo',       value: `zalo.me/${settings.zalo}`, href: `https://zalo.me/${settings.zalo}`,                              color: '#0068FF' },
     settings.address  && { icon: MapPin,        label: 'Địa chỉ',   value: settings.address,     href: `https://maps.google.com/?q=${encodeURIComponent(settings.address)}`,  color: '#c51c23' },
     settings.facebook && { icon: ExternalLink,  label: 'Facebook',   value: 'Facebook Page',      href: settings.facebook,                                                     color: '#1877F2' },
-  ].filter(Boolean) as { icon: React.ElementType; label: string; value: string; href?: string; color: string }[]
+  ].filter(Boolean) as { icon: ElementType; label: string; value: string; href?: string; color: string }[]
 
   return (
     <div className="public-page-bg">
@@ -93,6 +95,16 @@ export default async function ContactPage({
                 )
               })}
             </div>
+
+            {contacts.length > 0 && (
+              <div>
+                <div className="mb-3">
+                  <h2 className="text-xl font-extrabold mb-1" style={{ color: '#303030' }}>Nhân viên tư vấn</h2>
+                  <p className="text-sm text-slate-500">Chọn người phụ trách để gọi điện hoặc nhắn Zalo trực tiếp.</p>
+                </div>
+                <SalesContactCards contacts={contacts} />
+              </div>
+            )}
 
             {/* Giờ làm việc */}
             <div className="filter-panel rounded-lg p-4">
