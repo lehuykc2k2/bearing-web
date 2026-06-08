@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { getProducts, getCategories } from '@/lib/data'
 
-const BASE = 'https://bearing-web.vercel.app'
+const BASE = 'https://www.vongbidx.com.vn'
 const LOCALES = ['vi', 'en']
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next'
 
-const BASE = 'https://bearing-web.vercel.app'
+const BASE = 'https://www.vongbidx.com.vn'
 
 export default function robots(): MetadataRoute.Robots {
   return {
