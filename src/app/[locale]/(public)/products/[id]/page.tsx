@@ -65,7 +65,7 @@ export default async function ProductDetailPage({
         .slice(0, 4)
     : []
 
-  const BASE = 'https://bearing-web.vercel.app'
+  const BASE = 'https://www.vongbidx.com.vn'
   const productUrl = `${BASE}/${locale}/products/${p.id}`
   const brandColor = getBrandTheme(p.brand)
   const primaryPhone = contacts[0]?.phone || settings.phone
