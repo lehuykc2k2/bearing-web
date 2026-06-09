@@ -22,7 +22,7 @@ export const BRAND_THEMES: Record<string, BrandTheme> = {
   },
   AGA: {
     key: 'AGA',
-    label: 'AGA',
+    label: 'AGA Bearings',
     shortLabel: 'AGA',
     bg: '#ea580c',
     text: 'white',

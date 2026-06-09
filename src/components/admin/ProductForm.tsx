@@ -404,7 +404,7 @@ export default function ProductForm({ categories, product }: Props) {
                   className={INPUT + ' bg-white'}>
                   <option value="">— Chọn thương hiệu —</option>
                   <option value="D&X">★ D&X Bearings (Chính hãng)</option>
-                  <option value="AGA">◎ AGA</option>
+                  <option value="AGA">◎ AGA Bearings</option>
                 </select>
               </div>
               <div>

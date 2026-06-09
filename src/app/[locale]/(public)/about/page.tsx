@@ -23,7 +23,7 @@ const commitments = [
 
 const certifications = [
   { name: 'D&X Bearings',   desc: 'Thương hiệu chủ đạo' },
-  { name: 'AGA',            desc: 'Thương hiệu thay thế' },
+  { name: 'AGA Bearings',   desc: 'Thương hiệu thay thế' },
   { name: 'Chính hãng',     desc: 'Nguồn gốc rõ ràng, tem nhãn đầy đủ' },
   { name: 'Bảo hành',       desc: 'Đổi trả theo chính sách nhà sản xuất' },
 ]

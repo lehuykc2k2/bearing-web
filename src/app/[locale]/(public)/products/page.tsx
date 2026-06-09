@@ -47,7 +47,7 @@ const BRAND_TABS = [
     gradient: 'linear-gradient(135deg,#2c2a7c 0%,#0c3263 100%)',
   },
   { value: 'D&X', subLabel: 'D&X Bearings', ...BRAND_THEMES['D&X'] },
-  { value: 'AGA', subLabel: 'Thương hiệu AGA', ...BRAND_THEMES.AGA },
+  { value: 'AGA', subLabel: 'AGA Bearings', ...BRAND_THEMES.AGA },
 ]
 
 export default async function ProductsPage({
